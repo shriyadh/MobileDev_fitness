@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Team1</string>
+    <string name="team_1">TEAM 1</string>
+    <string name="web_service">Web Service</string>
+</resources>
