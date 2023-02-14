@@ -11,10 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/team_1"
+        android:textColor="#121211"
+        android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
 
     <Button
         android:id="@+id/button"
@@ -25,6 +28,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/teamName"/>
+        app:layout_constraintTop_toBottomOf="@id/teamName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
