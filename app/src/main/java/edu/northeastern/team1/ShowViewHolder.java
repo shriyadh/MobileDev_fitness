@@ -21,10 +21,8 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
         this.year = view.findViewById(R.id.tv_show_year);
         this.poster = view.findViewById(R.id.imageView);
 
-
-        // this.search = view.findViewById(R.id.);
-        // this.switch = view.findViewById(R.id.);
         // set onClick listener on specific obj
+        view.on
 
 
     }

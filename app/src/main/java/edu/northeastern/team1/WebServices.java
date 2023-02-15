@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class WebServices extends AppCompatActivity {
+public class WebServices extends AppCompatActivity implements {
     private RecyclerView showRecycler;
     private List<Show> listOfShows = new ArrayList<>();
     private RecycleViewClickListener listener;
@@ -59,7 +59,6 @@ public class WebServices extends AppCompatActivity {
             }
             adapter.notifyDataSetChanged();
         });
-
 
         // call setupRecycler
         setUpRecycler();
@@ -210,7 +209,7 @@ public class WebServices extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle saveThis) {
 
         int len = listOfShows == null? 0: listOfShows.size();
-        saveThis.putInt("NUM_LINKS_TO_RETRIEVE", len);
+        saveThis.putInt("SIZE_OF_LINKS", len);
         for(int i =0; i < len; i++) {
             saveThis.putDouble("UNIQUE_ID" + i + "0", listOfShows.get(i).getScore());
             saveThis.putString("UNIQUE_ID" + i + "1", listOfShows.get(i).getName());
