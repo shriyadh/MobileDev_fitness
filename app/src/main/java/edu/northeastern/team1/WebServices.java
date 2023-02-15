@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -251,6 +253,7 @@ public class WebServices extends AppCompatActivity {
                 // add functionality for opening alert dialog box to display information
                 DisplayShowInformation display = new DisplayShowInformation(listOfShows, position);
                 display.show(getSupportFragmentManager(), "Show Information");
+                //Window window = display.getDialog().getWindow();
             }
         };
         adapter.setListenerLink(listener);
