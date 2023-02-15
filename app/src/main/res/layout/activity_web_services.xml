@@ -15,14 +15,15 @@
       android:layout_marginTop="16dp"
       android:ems="10"
       android:inputType="textPersonName"
-      android:text="@string/search_tv_show"
+      android:hint="@string/search_tv_show"
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0" />
+      app:layout_constraintVertical_bias="0.0"
+      android:autofillHints="@string/search_tv_show" />
 
   <ImageButton
       android:id="@+id/imageButton_magnifying_glass"
@@ -55,8 +56,8 @@
 
   <ImageView
       android:id="@+id/imageView_filter_icon"
-      android:layout_width="40dp"
-      android:layout_height="37dp"
+      android:layout_width="44dp"
+      android:layout_height="48dp"
       android:layout_marginStart="16dp"
       android:contentDescription="@string/filter_imageView"
       app:layout_constraintBottom_toBottomOf="parent"
