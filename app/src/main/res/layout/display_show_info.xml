@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/title_txt"
+        android:textColor="#121211"
         android:layout_width="300dp"
         android:layout_height="56dp"
         android:text="@string/title"
@@ -19,6 +20,7 @@
 
     <TextView
         android:id="@+id/description_txt"
+        android:textColor="#121211"
         android:layout_width="300dp"
         android:layout_height="90dp"
         android:layout_marginBottom="8dp"
@@ -30,6 +32,7 @@
 
     <TextView
         android:id="@+id/year_txt"
+        android:textColor="#121211"
         android:layout_width="300dp"
         android:layout_height="56dp"
         android:text="@string/year"
@@ -40,6 +43,7 @@
 
     <TextView
         android:id="@+id/rating_txt"
+        android:textColor="#121211"
         android:layout_width="300dp"
         android:layout_height="56dp"
         android:text="@string/rating"
