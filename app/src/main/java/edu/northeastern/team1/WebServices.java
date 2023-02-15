@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class WebServices extends AppCompatActivity implements {
+public class WebServices extends AppCompatActivity  {
     private RecyclerView showRecycler;
     private List<Show> listOfShows = new ArrayList<>();
     private RecycleViewClickListener listener;
@@ -179,7 +179,7 @@ public class WebServices extends AppCompatActivity implements {
 
     private void loadSavedInstance(Bundle savedInstanceState) {
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("RETRIEVE_LINKS")) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("SIZE_OF_LINKS")) {
             if (listOfShows == null || listOfShows.size() == 0) {
 
                 int len = savedInstanceState.getInt("SIZE_OF_LINKS");
