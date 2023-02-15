@@ -46,10 +46,13 @@ public class WebServices extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_services);
+
         // load things from onSavedInstance on orientation change
-        loadSavedInstance(savedInstanceState);
+        init(savedInstanceState);
+
         this.searchBar = findViewById(R.id.EditText_TV_searchbar);
         this.magnifyingGlass = findViewById(R.id.imageButton_magnifying_glass);
+
         SwitchCompat filterSwitch = findViewById(R.id.year_new_to_old_switch);
         filterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -59,10 +62,11 @@ public class WebServices extends AppCompatActivity  {
             }
             adapter.notifyDataSetChanged();
         });
+    }
 
-        // call setupRecycler
+    public void init(Bundle savedInstanceState) {
+        loadSavedInstance(savedInstanceState);
         setUpRecycler();
-
     }
 
     public void parseSearchText(View v) {
