@@ -9,21 +9,21 @@
 
   <EditText
       android:id="@+id/EditText_TV_searchbar"
-      android:layout_width="324dp"
+      android:layout_width="0dp"
       android:layout_height="53dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="16dp"
+      android:layout_marginEnd="1dp"
+      android:autofillHints="@string/search_tv_show"
       android:ems="10"
-      android:inputType="textPersonName"
       android:hint="@string/search_tv_show"
+      android:inputType="textPersonName"
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintEnd_toStartOf="@+id/imageButton_magnifying_glass"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0"
-      android:autofillHints="@string/search_tv_show" />
+      app:layout_constraintVertical_bias="0.0" />
 
   <ImageButton
       android:id="@+id/imageButton_magnifying_glass"
@@ -31,8 +31,8 @@
       android:layout_height="54dp"
       android:layout_marginTop="16dp"
       android:layout_marginEnd="16dp"
-      android:onClick="parseSearchText"
       android:contentDescription="@string/search_magnifying_glass_button"
+      android:onClick="parseSearchText"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="1.0"
