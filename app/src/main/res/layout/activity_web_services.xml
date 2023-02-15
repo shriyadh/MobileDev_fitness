@@ -6,17 +6,78 @@
     android:layout_height="match_parent"
     tools:context=".WebServices">
 
-    <Button
-        android:id="@+id/search_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="callApi"
-        android:text="@string/button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.127" />
+  <EditText
+      android:id="@+id/EditText_TV_searchbar"
+      android:layout_width="0dp"
+      android:layout_height="53dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginEnd="1dp"
+      android:layout_marginBottom="1dp"
+      android:autofillHints="@string/search_tv_show"
+      android:ems="10"
+      android:hint="@string/search_tv_show"
+      android:inputType="textPersonName"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toBottomOf="@+id/year_new_to_old_switch"
+      app:layout_constraintEnd_toStartOf="@+id/imageButton_magnifying_glass"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0" />
+
+  <ImageButton
+      android:id="@+id/imageButton_magnifying_glass"
+      android:layout_width="54dp"
+      android:layout_height="54dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="1dp"
+      android:contentDescription="@string/search_magnifying_glass_button"
+      android:onClick="parseSearchText"
+      app:layout_constraintBottom_toBottomOf="@+id/year_new_to_old_switch"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintStart_toEndOf="@+id/EditText_TV_searchbar"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0"
+      app:srcCompat="@drawable/ic_baseline_search_24"
+      tools:ignore="RedundantDescriptionCheck" />
+
+  <androidx.appcompat.widget.SwitchCompat
+      android:id="@+id/year_new_to_old_switch"
+      android:layout_width="173dp"
+      android:layout_height="48dp"
+      android:text="@string/year_new_to_old"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toEndOf="@+id/imageView_filter_icon"
+      app:layout_constraintTop_toBottomOf="@+id/EditText_TV_searchbar"
+      app:layout_constraintVertical_bias="0.0" />
+
+  <ImageView
+      android:id="@+id/imageView_filter_icon"
+      android:layout_width="44dp"
+      android:layout_height="48dp"
+      android:layout_marginStart="16dp"
+      android:contentDescription="@string/filter_imageView"
+      app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+      app:layout_constraintEnd_toStartOf="@+id/year_new_to_old_switch"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintHorizontal_chainStyle="packed"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/EditText_TV_searchbar"
+      app:layout_constraintVertical_bias="0.0"
+      app:srcCompat="@drawable/baseline_filter_list_24" />
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recyclerView"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageView_filter_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
