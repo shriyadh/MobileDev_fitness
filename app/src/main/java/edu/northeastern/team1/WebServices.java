@@ -1,7 +1,6 @@
 package edu.northeastern.team1;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 public class WebServices extends AppCompatActivity {
