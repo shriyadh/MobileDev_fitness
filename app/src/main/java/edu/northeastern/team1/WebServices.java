@@ -59,7 +59,7 @@ public class WebServices extends AppCompatActivity {
         String enteredSearch = searchBar.getText().toString();
         enteredSearch = enteredSearch.replaceAll("\\s", "%20");
         url = "https://api.tvmaze.com/search/shows?q=" + enteredSearch;
-        listOfShows = new ArrayList<>();
+        setUpRecycler();
         callApi(v);
     }
 
@@ -80,7 +80,6 @@ public class WebServices extends AppCompatActivity {
 
         @Override
         public void run() {
-
             try {
                 // store search as a url
                 URL url = new URL(search);
@@ -126,7 +125,7 @@ public class WebServices extends AppCompatActivity {
 
                     // get average rating
                     JSONObject rating = show.getJSONObject("rating");
-                    String avg_rating = rating.getDouble("average");
+                    String avg_rating = rating.getString("average");
                     System.out.println(avg_rating);
 
                     // get image link
@@ -208,6 +207,7 @@ public class WebServices extends AppCompatActivity {
     }
 
     private void setUpRecycler(){
+        listOfShows = new ArrayList<>();
         showRecycler = findViewById(R.id.recyclerView);
         showRecycler.setHasFixedSize(true);
 
