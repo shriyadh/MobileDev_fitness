@@ -10,15 +10,15 @@ public class Show {
 
     private String pic_url;
 
-    private double rating;
+    private String rating;
 
-    public Show(String name, String des, String pic, double rate, String year ) {
+    public Show(String name, String des, String pic, String rate, String year ) {
 
-        this.name = name;
-        this.description = des;
-        this.year = year;
-        this.pic_url = pic;
-        this.rating = rate;
+        this.name = name == null ? "": name;
+        this.description = des == null ? "" : des;
+        this.year = year == null ? "" : year;
+        this.pic_url = pic == null ? "" : pic;
+        this.rating = rate == null ? "" : rate;
 
     }
 
@@ -35,7 +35,7 @@ public class Show {
         return this.year;
     }
 
-    public double getRating(){
+    public String getRating(){
         return this.rating;
     }
 
