@@ -212,11 +212,12 @@ public class WebServices extends AppCompatActivity {
         int len = listOfShows == null? 0: listOfShows.size();
         saveThis.putInt("NUM_LINKS_TO_RETRIEVE", len);
         for(int i =0; i < len; i++) {
-            saveThis.putString("UNIQUE_ID"+ i + "0", listOfShows.get(i).getName());
-            saveThis.putString("UNIQUE_ID" + i + "1", listOfShows.get(i).getPicture());
-            saveThis.putString("UNIQUE_ID" + i + "2", listOfShows.get(i).getDescription());
-            saveThis.putString("UNIQUE_ID" + i + "3", listOfShows.get(i).getYear());
-            saveThis.putString("UNIQUE_ID" + i + "4", listOfShows.get(i).getRating());
+            saveThis.putDouble("UNIQUE_ID" + i + "0", listOfShows.get(i).getScore());
+            saveThis.putString("UNIQUE_ID" + i + "1", listOfShows.get(i).getName());
+            saveThis.putString("UNIQUE_ID" + i + "2", listOfShows.get(i).getPicture());
+            saveThis.putString("UNIQUE_ID" + i + "3", listOfShows.get(i).getDescription());
+            saveThis.putString("UNIQUE_ID" + i + "4", listOfShows.get(i).getYear());
+            saveThis.putString("UNIQUE_ID" + i + "5", listOfShows.get(i).getRating());
 
         }
         super.onSaveInstanceState(saveThis);
