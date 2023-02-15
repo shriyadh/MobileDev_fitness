@@ -2,4 +2,8 @@
     <string name="app_name">Team1</string>
     <string name="team_1">TEAM 1</string>
     <string name="web_service">Web Service</string>
+    <string name="filter_imageView">Filter image view</string>
+    <string name="search_tv_show">Search TV Show</string>
+    <string name="year_new_to_old">Year: New to Old</string>
+    <string name="search_magnifying_glass_button">Search magnifying glass button</string>
 </resources>
