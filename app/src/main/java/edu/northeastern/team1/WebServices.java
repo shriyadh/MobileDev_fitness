@@ -177,7 +177,7 @@ public class WebServices extends AppCompatActivity {
                     String img_url = savedInstanceState.getString("UNIQUE_ID" + i + "1");
                     String description = savedInstanceState.getString("UNIQUE_ID" + i + "2");
                     String year = savedInstanceState.getString("UNIQUE_ID" + i + "3");
-                    double rating = savedInstanceState.getDouble("UNIQUE_ID" + i + "4");
+                    String rating = savedInstanceState.getString("UNIQUE_ID" + i + "4");
 
                     Show add_show = new Show(title, description, img_url, rating, year);
 
