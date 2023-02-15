@@ -68,10 +68,17 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
 
     public void setView(){
         Show curr = listShows.get(pos);
-        title.setText(curr.getName().toString());
-        description.setText(curr.getDescription().toString());
-        rating.setText(curr.getRating().toString());
-        year.setText(curr.getYear().toString());
+        String name = "Title: " + curr.getName();
+        title.setText(name);
+
+        String des = "Description: " + curr.getDescription();
+        description.setText(des);
+
+        String rate = "Rating: " + curr.getRating();
+        rating.setText(rate);
+
+        String yr = "Year: " + curr.getYear();
+        year.setText(yr);
         //title.setText(curr.getName().toString());
 
 
