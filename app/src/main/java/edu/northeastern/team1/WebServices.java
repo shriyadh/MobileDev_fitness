@@ -235,6 +235,8 @@ public class WebServices extends AppCompatActivity  {
             @Override
             public void onLinkClick(int position) {
                 // add functionality for opening alert dialog box to display information
+                DisplayShowInformation display = new DisplayShowInformation();
+                display.show(getSupportFragmentManager(), "Show Information");
             }
         };
         adapter.setListenerLink(listener);

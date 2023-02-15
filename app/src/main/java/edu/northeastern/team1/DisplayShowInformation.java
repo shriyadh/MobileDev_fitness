@@ -40,14 +40,14 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
             }
         });
 
-        title = view.findViewById(R.id.);
+       /* title = view.findViewById(R.id.);
         description = view.findViewById(R.id.);
         rating = view.findViewById(R.id.);
         year = view.findViewById(R.id.);
         img = view.findViewById(R.id.);
 
 
-
+*/
         return inputBox.create();
     }
 

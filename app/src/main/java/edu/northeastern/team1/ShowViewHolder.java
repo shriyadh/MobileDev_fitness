@@ -22,7 +22,15 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
         this.poster = view.findViewById(R.id.imageView);
 
         // set onClick listener on specific obj
-        view.on
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = getLayoutPosition();
+                if(pos != RecyclerView.NO_POSITION){
+                    lst.onLinkClick(pos);
+                }
+            }
+        });
 
 
     }
