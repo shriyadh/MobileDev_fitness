@@ -6,4 +6,7 @@
     <string name="search_tv_show">Search TV Show</string>
     <string name="year_new_to_old">Year: New to Old</string>
     <string name="search_magnifying_glass_button">Search magnifying glass button</string>
+    <string name="tv_show_name">TV Show Name</string>
+    <string name="poster_image">Poster Image</string>
+    <string name="tv_show_year">TV Show Year</string>
 </resources>
