@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class WebServices extends AppCompatActivity  {
+public class WebServices extends AppCompatActivity {
     private RecyclerView showRecycler;
     private List<Show> listOfShows = new ArrayList<>();
     private RecycleViewClickListener listener;
@@ -83,6 +83,7 @@ public class WebServices extends AppCompatActivity  {
         runnableThread.setURL(url);
         new Thread(runnableThread).start();
     }
+
 
 
     class runnableThread implements Runnable {
@@ -248,7 +249,7 @@ public class WebServices extends AppCompatActivity  {
             @Override
             public void onLinkClick(int position) {
                 // add functionality for opening alert dialog box to display information
-                DisplayShowInformation display = new DisplayShowInformation();
+                DisplayShowInformation display = new DisplayShowInformation(listOfShows, position);
                 display.show(getSupportFragmentManager(), "Show Information");
             }
         };

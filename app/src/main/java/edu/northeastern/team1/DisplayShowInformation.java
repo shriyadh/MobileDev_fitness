@@ -6,14 +6,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import java.util.List;
 
 public class DisplayShowInformation extends AppCompatDialogFragment {
     private TextView title;
@@ -21,9 +21,16 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
     private TextView year;
     private TextView rating;
     private ImageView img;
+    private int pos;
 
-    private DgListener dglistener;
+    private List<Show> listShows;
+   // private DgListener dglistener;
 
+    public DisplayShowInformation(List<Show> lstshows, int position){
+        listShows = lstshows;
+        pos = position;
+
+    }
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -45,30 +52,33 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         rating = view.findViewById(R.id.rating_txt);
         year = view.findViewById(R.id.year_txt);
 
-
-
+        setView();
 
         return inputBox.create();
     }
 
-    private void setView(){
-       // title.setText();
+    public void setList(List<Show> lstshows) {
+        this.listShows = lstshows;
+    }
+
+    public void setPos(int position){
+        this.pos = position;
 
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            dglistener = (DgListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "must implement dgListener");
-        }
+    public void setView(){
+        Show curr = listShows.get(pos);
+        title.setText(curr.getName().toString());
+        description.setText(curr.getDescription().toString());
+        rating.setText(curr.getRating().toString());
+        year.setText(curr.getYear().toString());
+        //title.setText(curr.getName().toString());
+
+
+
+
     }
 
-    public interface DgListener {
-       // applySetView(int pos);
 
-        }
 
 }
