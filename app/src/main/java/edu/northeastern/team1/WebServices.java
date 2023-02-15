@@ -70,7 +70,7 @@ public class WebServices extends AppCompatActivity  {
     }
 
     public void parseSearchText(View v) {
-
+        listOfShows.clear();
         String enteredSearch = searchBar.getText().toString();
         enteredSearch = enteredSearch.replaceAll("\\s", "%20");
         url = "https://api.tvmaze.com/search/shows?q=" + enteredSearch;
@@ -234,7 +234,6 @@ public class WebServices extends AppCompatActivity  {
     }
 
     private void setUpRecycler(){
-        listOfShows = new ArrayList<>();
         showRecycler = findViewById(R.id.recyclerView);
         showRecycler.setHasFixedSize(true);
 
