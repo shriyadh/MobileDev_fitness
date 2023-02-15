@@ -37,12 +37,13 @@
       app:layout_constraintStart_toEndOf="@+id/EditText_TV_searchbar"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.0"
-      app:srcCompat="@drawable/ic_baseline_search_24" />
+      app:srcCompat="@drawable/ic_baseline_search_24"
+      tools:ignore="RedundantDescriptionCheck" />
 
   <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/year_new_to_old_switch"
       android:layout_width="173dp"
-      android:layout_height="38dp"
+      android:layout_height="48dp"
       android:text="@string/year_new_to_old"
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
