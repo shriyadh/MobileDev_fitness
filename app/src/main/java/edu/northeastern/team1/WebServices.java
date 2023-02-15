@@ -183,8 +183,12 @@ public class WebServices extends AppCompatActivity  {
 
     private void loadSavedInstance(Bundle savedInstanceState) {
         // If Activity has already been opened
+        Log.d("SAVE", "In load" );
+
         if (savedInstanceState != null && savedInstanceState.containsKey("SIZE_OF_LINKS")) {
             int len = savedInstanceState.getInt("SIZE_OF_LINKS");
+            Log.d("SAVE", " was true");
+
 
             for (int i = 0; i < len; i++) {
                 // what are we getting from the savedinstance????
@@ -199,6 +203,8 @@ public class WebServices extends AppCompatActivity  {
 
                 listOfShows.add(add_show);
             }
+            Log.d("SAVE", "len of loaded" + listOfShows.size());
+
         }
         else {
             //nothing
@@ -210,6 +216,8 @@ public class WebServices extends AppCompatActivity  {
     protected void onSaveInstanceState(@NonNull Bundle saveThis) {
 
         int len = listOfShows == null? 0: listOfShows.size();
+        Log.d("SAVE", "len" + len);
+
         saveThis.putInt("SIZE_OF_LINKS", len);
         for(int i =0; i < len; i++) {
             saveThis.putDouble("UNIQUE_ID" + i + "0", listOfShows.get(i).getScore());
@@ -220,6 +228,8 @@ public class WebServices extends AppCompatActivity  {
             saveThis.putString("UNIQUE_ID" + i + "5", listOfShows.get(i).getRating());
 
         }
+        Log.d("SAVE", "len" + listOfShows.size());
+
         super.onSaveInstanceState(saveThis);
     }
 
