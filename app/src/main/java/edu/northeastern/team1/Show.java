@@ -1,6 +1,7 @@
 package edu.northeastern.team1;
 
 public class Show {
+    private double score;
 
     private String name;
 
@@ -12,14 +13,18 @@ public class Show {
 
     private String rating;
 
-    public Show(String name, String des, String pic, String rate, String year ) {
-
+    public Show(double score, String name, String des, String pic, String rate, String year ) {
+        this.score = score < 0 ? 0 : score;
         this.name = name == null ? "": name;
         this.description = des == null ? "" : des;
         this.year = year == null ? "" : year;
         this.pic_url = pic == null ? "" : pic;
         this.rating = rate == null ? "" : rate;
 
+    }
+
+    public double getScore() {
+        return this.score;
     }
 
     public String getName(){

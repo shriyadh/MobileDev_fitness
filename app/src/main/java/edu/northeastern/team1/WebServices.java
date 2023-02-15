@@ -40,7 +40,6 @@ public class WebServices extends AppCompatActivity {
     private RecyclerView.LayoutManager layout;
     private EditText searchBar;
     private ImageButton magnifyingGlass;
-    private SwitchCompat filterSwitch;
     private String url;
 
     @Override
@@ -51,13 +50,14 @@ public class WebServices extends AppCompatActivity {
         loadSavedInstance(savedInstanceState);
         this.searchBar = findViewById(R.id.EditText_TV_searchbar);
         this.magnifyingGlass = findViewById(R.id.imageButton_magnifying_glass);
-        this.filterSwitch = findViewById(R.id.year_new_to_old_switch);
-
+        SwitchCompat filterSwitch = findViewById(R.id.year_new_to_old_switch);
         filterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                listOfShows.sort(Comparator.comparing(Show::getYear));
+                listOfShows.sort(Comparator.comparing(Show::getYear).reversed());
+            } else {
+                listOfShows.sort(Comparator.comparing(Show::getScore).reversed());
             }
-            adapter.notifyItemMoved(0, listOfShows.size() + 1);
+            adapter.notifyDataSetChanged();
         });
 
 
@@ -123,6 +123,9 @@ public class WebServices extends AppCompatActivity {
                     JSONObject obj = jArray.getJSONObject(i);
                     System.out.println(obj);
 
+                    // get show relevance score
+                    double score = Double.parseDouble(obj.getString("score"));
+
                     // the object contains another object called "show"
                     // store the show object
                     JSONObject show = obj.getJSONObject("show");
@@ -152,7 +155,7 @@ public class WebServices extends AppCompatActivity {
 
                     //making sure shows are stored
                     //will need to store show objects instead
-                    Show new_show = new Show(name, description, img_link, avg_rating, year);
+                    Show new_show = new Show(score, name, description, img_link, avg_rating, year);
                     listOfShows.add(new_show);
 
                     System.out.println("Here");
@@ -184,13 +187,14 @@ public class WebServices extends AppCompatActivity {
 
                 for (int i = 0; i < len; i++) {
                     // what are we getting from the savedinstance????
-                    String title = savedInstanceState.getString("UNIQUE_ID" + i + "0");
-                    String img_url = savedInstanceState.getString("UNIQUE_ID" + i + "1");
-                    String description = savedInstanceState.getString("UNIQUE_ID" + i + "2");
-                    String year = savedInstanceState.getString("UNIQUE_ID" + i + "3");
-                    String rating = savedInstanceState.getString("UNIQUE_ID" + i + "4");
+                    double score = savedInstanceState.getDouble("UNIQUE_ID" + i + "0");
+                    String title = savedInstanceState.getString("UNIQUE_ID" + i + "1");
+                    String img_url = savedInstanceState.getString("UNIQUE_ID" + i + "2");
+                    String description = savedInstanceState.getString("UNIQUE_ID" + i + "3");
+                    String year = savedInstanceState.getString("UNIQUE_ID" + i + "4");
+                    String rating = savedInstanceState.getString("UNIQUE_ID" + i + "5");
 
-                    Show add_show = new Show(title, description, img_url, rating, year);
+                    Show add_show = new Show(score, title, description, img_url, rating, year);
 
                     listOfShows.add(add_show);
                 }
