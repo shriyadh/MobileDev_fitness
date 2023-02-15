@@ -15,10 +15,13 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
     private List<Show> listOfShows;
     private Context context;
     private RecycleViewClickListener listener;
+    private String title;
+    private String year;
+    private String img;
 
     public ShowAdapter(List<Show> shows, Context con) {
         this.listOfShows = shows;
-        this.context = context;
+        this.context = con;
     }
 
     public void setListenerLink(RecycleViewClickListener lst) {
@@ -38,7 +41,8 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
     @Override
     public void onBindViewHolder( ShowViewHolder holder, int position) {
         Show curr = listOfShows.get(position);
-        //holder.name.setText(curr.getName());
+        holder.title.setText(curr.getName());
+        holder.year.setText(curr.getYear());
 
     }
 
