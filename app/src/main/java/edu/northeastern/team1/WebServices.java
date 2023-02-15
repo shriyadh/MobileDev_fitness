@@ -1,6 +1,10 @@
 package edu.northeastern.team1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -21,15 +25,25 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class WebServices extends AppCompatActivity {
-    ArrayList<String> shows = new ArrayList<>();
+    private RecyclerView showRecycler;
+    private List<Show> listOfShows = new ArrayList<>();
+    private RecycleViewClickListener listener;
+    private ShowAdapter adapter;
+    private RecyclerView.LayoutManager layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_services);
+        // load things from onSavedInstance on orientation change
+        loadSavedInstance(savedInstanceState);
+
+        // call setupRecycler
+        setUpRecycler();
 
     }
 
@@ -95,7 +109,7 @@ public class WebServices extends AppCompatActivity {
 
                     // get average rating
                     JSONObject rating = show.getJSONObject("rating");
-                    String avg_rating = rating.getString("average");
+                    double avg_rating = rating.getDouble("average");
                     System.out.println(avg_rating);
 
                     // get image link
@@ -105,13 +119,15 @@ public class WebServices extends AppCompatActivity {
 
                     //get premiere date
                     String date = show.getString("premiered");
-                    System.out.println(date);
+                    String year = date.split("-")[0];
+                    System.out.println(year);
 
                     //making sure shows are stored
                     //will need to store show objects instead
-                    shows.add(name);
+                    Show new_show = new Show(name, description,img_link, avg_rating, year);
+                    listOfShows.add(new_show);
 
-                    System.out.println(shows);}
+                    System.out.println(listOfShows);}
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -126,6 +142,76 @@ public class WebServices extends AppCompatActivity {
         return s.hasNext() ? s.next() : "";
     }
 
+    private void loadSavedInstance(Bundle savedInstanceState) {
 
+        if (savedInstanceState != null && savedInstanceState.containsKey("RETRIEVE_LINKS")) {
+            if (listOfShows == null || listOfShows.size() == 0) {
 
+                int len = savedInstanceState.getInt("SIZE_OF_LINKS");
+
+                for (int i = 0; i < len; i++) {
+                    // what are we getting from the savedinstance????
+                    String title = savedInstanceState.getString("UNIQUE_ID" + i + "0");
+                    String img_url = savedInstanceState.getString("UNIQUE_ID" + i + "1");
+                    String description = savedInstanceState.getString("UNIQUE_ID" + i + "2");
+                    String year = savedInstanceState.getString("UNIQUE_ID" + i + "3");
+                    double rating = savedInstanceState.getDouble("UNIQUE_ID" + i + "4");
+
+                    Show add_show = new Show(title, description, img_url, rating, year);
+
+                    listOfShows.add(add_show);
+                }
+            }
+        }
+        else {
+            //nothing
+            listOfShows = new ArrayList<>();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle saveThis) {
+
+        int len = listOfShows == null? 0: listOfShows.size();
+        saveThis.putInt("NUM_LINKS_TO_RETRIEVE", len);
+        for(int i =0; i < len; i++) {
+            saveThis.putString("UNIQUE_ID"+ i + "0", listOfShows.get(i).getName());
+            saveThis.putString("UNIQUE_ID" + i + "1", listOfShows.get(i).getPicture());
+            saveThis.putString("UNIQUE_ID" + i + "2", listOfShows.get(i).getDescription());
+            saveThis.putString("UNIQUE_ID" + i + "3", listOfShows.get(i).getYear());
+            saveThis.putDouble("UNIQUE_ID" + i + "4", listOfShows.get(i).getRating());
+
+        }
+        super.onSaveInstanceState(saveThis);
+    }
+
+    private void setUpRecycler(){
+        showRecycler = findViewById(R.id.recyclerView);
+        showRecycler.setHasFixedSize(true);
+
+        // set layout
+        showRecycler.setLayoutManager(new LinearLayoutManager(this));
+        //set adapter
+        adapter = new ShowAdapter(listOfShows, this);
+        showRecycler.setAdapter(adapter);
+
+        // set the listener for recycler view
+        RecycleViewClickListener listener = new RecycleViewClickListener() {
+            @Override
+            public void onLinkClick(int position) {
+                // add functionality for opening alert dialog box to display information
+            }
+        };
+        adapter.setListenerLink(listener);
+
+        // add divided b/w links
+        DividerItemDecoration decor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        showRecycler.addItemDecoration(decor);
+
+        // do we have swipe functionality for our recycler???????????????
+    }
 }
+
+
+
+

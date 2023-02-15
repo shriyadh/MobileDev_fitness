@@ -6,13 +6,13 @@ public class Show {
 
     private String description;
 
-    private int year;
+    private String year;
 
     private String pic_url;
 
     private double rating;
 
-    public Show(String name, String des, String pic, double rate, int year ) {
+    public Show(String name, String des, String pic, double rate, String year ) {
 
         this.name = name;
         this.description = des;
@@ -31,7 +31,7 @@ public class Show {
         return this.pic_url;
     }
 
-    public int getYear(){
+    public String getYear(){
         return this.year;
     }
 
