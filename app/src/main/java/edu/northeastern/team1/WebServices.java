@@ -141,12 +141,12 @@ public class WebServices extends AppCompatActivity {
                     //making sure shows are stored
                     //will need to store show objects instead
                     Show new_show = new Show(name, description, img_link, avg_rating, year);
-                    listOfShows.add(0, new_show);
+                    listOfShows.add(new_show);
 
                     System.out.println("Here");
 
 
-                    adapter.notifyItemInserted(0);
+                    adapter.notifyItemInserted(listOfShows.size() + 1);
                 }
                 System.out.println(listOfShows);
 
