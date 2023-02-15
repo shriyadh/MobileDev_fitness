@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -34,6 +35,9 @@ public class WebServices extends AppCompatActivity {
     private RecycleViewClickListener listener;
     private ShowAdapter adapter;
     private RecyclerView.LayoutManager layout;
+    private EditText searchBar;
+    private ImageButton magnifyingGlass;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +45,27 @@ public class WebServices extends AppCompatActivity {
         setContentView(R.layout.activity_web_services);
         // load things from onSavedInstance on orientation change
         loadSavedInstance(savedInstanceState);
+        this.searchBar = findViewById(R.id.EditText_TV_searchbar);
+        this.magnifyingGlass = findViewById(R.id.imageButton_magnifying_glass);
+
 
         // call setupRecycler
         setUpRecycler();
 
     }
 
+    public void parseSearchText(View v) {
+
+        String enteredSearch = searchBar.getText().toString();
+        enteredSearch = enteredSearch.replaceAll("\\s", "%20");
+        url = "https://api.tvmaze.com/search/shows?q=" + enteredSearch;
+
+        callApi(v);
+    }
+
     public void callApi(View v){
-        String str = "https://api.tvmaze.com/search/shows?q=sunny%20in";
         runnableThread runnableThread = new runnableThread();
-        runnableThread.setURL(str);
+        runnableThread.setURL(url);
         new Thread(runnableThread).start();
     }
 
