@@ -2,6 +2,7 @@ package edu.northeastern.team1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -37,6 +40,7 @@ public class WebServices extends AppCompatActivity {
     private RecyclerView.LayoutManager layout;
     private EditText searchBar;
     private ImageButton magnifyingGlass;
+    private SwitchCompat filterSwitch;
     private String url;
 
     @Override
@@ -47,6 +51,14 @@ public class WebServices extends AppCompatActivity {
         loadSavedInstance(savedInstanceState);
         this.searchBar = findViewById(R.id.EditText_TV_searchbar);
         this.magnifyingGlass = findViewById(R.id.imageButton_magnifying_glass);
+        this.filterSwitch = findViewById(R.id.year_new_to_old_switch);
+
+        filterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                listOfShows.sort(Comparator.comparing(Show::getYear));
+            }
+            adapter.notifyItemMoved(0, listOfShows.size() + 1);
+        });
 
 
         // call setupRecycler
