@@ -178,25 +178,22 @@ public class WebServices extends AppCompatActivity  {
     }
 
     private void loadSavedInstance(Bundle savedInstanceState) {
-
+        // If Activity has already been opened
         if (savedInstanceState != null && savedInstanceState.containsKey("SIZE_OF_LINKS")) {
-            if (listOfShows == null || listOfShows.size() == 0) {
+            int len = savedInstanceState.getInt("SIZE_OF_LINKS");
 
-                int len = savedInstanceState.getInt("SIZE_OF_LINKS");
+            for (int i = 0; i < len; i++) {
+                // what are we getting from the savedinstance????
+                double score = savedInstanceState.getDouble("UNIQUE_ID" + i + "0");
+                String title = savedInstanceState.getString("UNIQUE_ID" + i + "1");
+                String img_url = savedInstanceState.getString("UNIQUE_ID" + i + "2");
+                String description = savedInstanceState.getString("UNIQUE_ID" + i + "3");
+                String year = savedInstanceState.getString("UNIQUE_ID" + i + "4");
+                String rating = savedInstanceState.getString("UNIQUE_ID" + i + "5");
 
-                for (int i = 0; i < len; i++) {
-                    // what are we getting from the savedinstance????
-                    double score = savedInstanceState.getDouble("UNIQUE_ID" + i + "0");
-                    String title = savedInstanceState.getString("UNIQUE_ID" + i + "1");
-                    String img_url = savedInstanceState.getString("UNIQUE_ID" + i + "2");
-                    String description = savedInstanceState.getString("UNIQUE_ID" + i + "3");
-                    String year = savedInstanceState.getString("UNIQUE_ID" + i + "4");
-                    String rating = savedInstanceState.getString("UNIQUE_ID" + i + "5");
+                Show add_show = new Show(score, title, description, img_url, rating, year);
 
-                    Show add_show = new Show(score, title, description, img_url, rating, year);
-
-                    listOfShows.add(add_show);
-                }
+                listOfShows.add(add_show);
             }
         }
         else {
