@@ -59,7 +59,7 @@ public class WebServices extends AppCompatActivity {
         String enteredSearch = searchBar.getText().toString();
         enteredSearch = enteredSearch.replaceAll("\\s", "%20");
         url = "https://api.tvmaze.com/search/shows?q=" + enteredSearch;
-
+        listOfShows = new ArrayList<>();
         callApi(v);
     }
 
@@ -104,6 +104,8 @@ public class WebServices extends AppCompatActivity {
                 // Store array of objects that api returns
                 JSONArray jArray = new JSONArray(resp);
 
+                System.out.println(jArray.length());
+
                 // loop through the array
                 for (int i = 0; i < jArray.length(); i++ ) {
                     // store the first object in the array
@@ -124,7 +126,7 @@ public class WebServices extends AppCompatActivity {
 
                     // get average rating
                     JSONObject rating = show.getJSONObject("rating");
-                    double avg_rating = rating.getDouble("average");
+                    String avg_rating = rating.getDouble("average");
                     System.out.println(avg_rating);
 
                     // get image link
@@ -139,10 +141,15 @@ public class WebServices extends AppCompatActivity {
 
                     //making sure shows are stored
                     //will need to store show objects instead
-                    Show new_show = new Show(name, description,img_link, avg_rating, year);
-                    listOfShows.add(new_show);
+                    Show new_show = new Show(name, description, img_link, avg_rating, year);
+                    listOfShows.add(0, new_show);
 
-                    System.out.println(listOfShows);}
+                    System.out.println("Here");
+
+
+                    adapter.notifyItemInserted(0);
+                }
+                System.out.println(listOfShows);
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -194,7 +201,7 @@ public class WebServices extends AppCompatActivity {
             saveThis.putString("UNIQUE_ID" + i + "1", listOfShows.get(i).getPicture());
             saveThis.putString("UNIQUE_ID" + i + "2", listOfShows.get(i).getDescription());
             saveThis.putString("UNIQUE_ID" + i + "3", listOfShows.get(i).getYear());
-            saveThis.putDouble("UNIQUE_ID" + i + "4", listOfShows.get(i).getRating());
+            saveThis.putString("UNIQUE_ID" + i + "4", listOfShows.get(i).getRating());
 
         }
         super.onSaveInstanceState(saveThis);
