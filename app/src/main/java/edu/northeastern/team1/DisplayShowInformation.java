@@ -40,17 +40,21 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
             }
         });
 
-       /* title = view.findViewById(R.id.);
-        description = view.findViewById(R.id.);
-        rating = view.findViewById(R.id.);
-        year = view.findViewById(R.id.);
-        img = view.findViewById(R.id.);
+        title = view.findViewById(R.id.title_txt);
+        description = view.findViewById(R.id.description_txt);
+        rating = view.findViewById(R.id.rating_txt);
+        year = view.findViewById(R.id.year_txt);
 
 
-*/
+
+
         return inputBox.create();
     }
 
+    private void setView(){
+       // title.setText();
+
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -63,7 +67,8 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
     }
 
     public interface DgListener {
-            void applyTexts(String urlName, String url);
+       // applySetView(int pos);
+
         }
 
 }
