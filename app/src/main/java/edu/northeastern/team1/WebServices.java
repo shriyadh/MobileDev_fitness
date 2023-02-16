@@ -1,25 +1,19 @@
 package edu.northeastern.team1;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.text.Layout;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +22,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,6 +37,7 @@ public class WebServices extends AppCompatActivity {
     private EditText searchBar;
     private ImageButton magnifyingGlass;
     private String url;
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +46,8 @@ public class WebServices extends AppCompatActivity {
 
         // load things from onSavedInstance on orientation change
         init(savedInstanceState);
+
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
         this.searchBar = findViewById(R.id.EditText_TV_searchbar);
         this.magnifyingGlass = findViewById(R.id.imageButton_magnifying_glass);
@@ -74,6 +69,7 @@ public class WebServices extends AppCompatActivity {
     }
 
     public void parseSearchText(View v) {
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         listOfShows.clear();
         String enteredSearch = searchBar.getText().toString();
         enteredSearch = enteredSearch.replaceAll("\\s", "%20");
@@ -103,7 +99,6 @@ public class WebServices extends AppCompatActivity {
             try {
                 // store search as a url
                 URL url = new URL(search);
-                System.out.println(url);
 
                 // set up connection
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -123,13 +118,10 @@ public class WebServices extends AppCompatActivity {
                 // Store array of objects that api returns
                 JSONArray jArray = new JSONArray(resp);
 
-                System.out.println(jArray.length());
-
                 // loop through the array
                 for (int i = 0; i < jArray.length(); i++ ) {
                     // store the first object in the array
                     JSONObject obj = jArray.getJSONObject(i);
-                    System.out.println(obj);
 
                     // get show relevance score
                     double score = Double.parseDouble(obj.getString("score"));
@@ -140,45 +132,35 @@ public class WebServices extends AppCompatActivity {
 
                     // get show name
                     String name = show.getString("name");
-                    System.out.println(name);
 
                     // get show description
                     String description = show.getString("summary");
-                    System.out.println(description);
 
                     // get average rating
                     JSONObject rating = show.getJSONObject("rating");
                     String avg_rating = rating.getString("average");
-                    System.out.println(avg_rating);
 
                     // get image link
                     JSONObject image = show.getJSONObject("image");
                     String img_link = image.getString("medium");
-                    System.out.println(img_link);
 
                     //get premiere date
                     String date = show.getString("premiered");
                     String year = date.split("-")[0];
-                    System.out.println(year);
 
                     //making sure shows are stored
                     //will need to store show objects instead
                     Show new_show = new Show(score, name, description, img_link, avg_rating, year);
                     listOfShows.add(new_show);
-
-                    System.out.println("Here");
-
-
-                    adapter.notifyItemInserted(listOfShows.size() + 1);
                 }
-                System.out.println(listOfShows);
-
+                handler.post(() -> {
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                });
+                adapter.notifyItemRangeInserted(0, listOfShows.size());
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     private String StreamToString(InputStream i) {
@@ -188,12 +170,8 @@ public class WebServices extends AppCompatActivity {
 
     private void loadSavedInstance(Bundle savedInstanceState) {
         // If Activity has already been opened
-        Log.d("SAVE", "In load" );
-
         if (savedInstanceState != null && savedInstanceState.containsKey("SIZE_OF_LINKS")) {
             int len = savedInstanceState.getInt("SIZE_OF_LINKS");
-            Log.d("SAVE", " was true");
-
 
             for (int i = 0; i < len; i++) {
                 // what are we getting from the savedinstance????
@@ -208,7 +186,6 @@ public class WebServices extends AppCompatActivity {
 
                 listOfShows.add(add_show);
             }
-            Log.d("SAVE", "len of loaded" + listOfShows.size());
 
         }
         else {
@@ -219,9 +196,7 @@ public class WebServices extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle saveThis) {
-
         int len = listOfShows == null? 0: listOfShows.size();
-        Log.d("SAVE", "len" + len);
 
         saveThis.putInt("SIZE_OF_LINKS", len);
         for(int i =0; i < len; i++) {
@@ -233,8 +208,6 @@ public class WebServices extends AppCompatActivity {
             saveThis.putString("UNIQUE_ID" + i + "5", listOfShows.get(i).getRating());
 
         }
-        Log.d("SAVE", "len" + listOfShows.size());
-
         super.onSaveInstanceState(saveThis);
     }
 
