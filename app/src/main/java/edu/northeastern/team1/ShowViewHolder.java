@@ -14,8 +14,6 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
     public TextView title;
     public TextView year;
     public ImageView poster;
-    // add button for switch
-
 
     public  ShowViewHolder(View view , RecycleViewClickListener lst){
         super(view);
