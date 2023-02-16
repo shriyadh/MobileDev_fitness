@@ -27,7 +27,6 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
     private int pos;
 
     private List<Show> listShows;
-   // private DgListener dglistener;
 
     public DisplayShowInformation(List<Show> lstshows, int position){
         listShows = lstshows;
@@ -60,15 +59,6 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         return inputBox.create();
     }
 
-    public void setList(List<Show> lstshows) {
-        this.listShows = lstshows;
-    }
-
-    public void setPos(int position){
-        this.pos = position;
-
-    }
-
     public void setView(){
         Show curr = listShows.get(pos);
         String name = "Title: " + curr.getName();
@@ -87,7 +77,6 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         description.setText(des);
 
         String rate = "Rating: " + curr.getRating();
-
         rating.setText(rate);
 
         String yr = "Year: " + curr.getYear();
