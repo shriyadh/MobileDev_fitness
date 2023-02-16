@@ -49,7 +49,7 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
                 // do nothing
             }
         });
-
+        img = view.findViewById(R.id.img_url);
         title = view.findViewById(R.id.title_txt);
         description = view.findViewById(R.id.description_txt);
         rating = view.findViewById(R.id.rating_txt);
@@ -72,6 +72,13 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
     public void setView(){
         Show curr = listShows.get(pos);
         String name = "Title: " + curr.getName();
+        String image = curr.getPicture();
+
+        Picasso.get()
+                .load(curr.getPicture())
+                .into(img);
+
+
         title.setText(name);
 
         String des = "Description: " + curr.getDescription();
