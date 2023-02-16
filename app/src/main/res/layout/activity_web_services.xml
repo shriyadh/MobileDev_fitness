@@ -19,6 +19,7 @@
       android:hint="@string/search_tv_show"
       android:inputType="textPersonName"
       android:textAlignment="center"
+      android:textColorHint="#757575"
       app:layout_constraintBottom_toBottomOf="@+id/year_new_to_old_switch"
       app:layout_constraintEnd_toStartOf="@+id/imageButton_magnifying_glass"
       app:layout_constraintStart_toStartOf="parent"
