@@ -74,6 +74,9 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         String des = "Description: " + curr.getDescription();
         des= des.replaceAll("<p>", "");
         des= des.replaceAll("</p>", "");
+        des= des.replaceAll("<b>", "");
+        des= des.replaceAll("</b>", "");
+
         description.setText(des);
 
         String rate = "Rating: " + curr.getRating();
