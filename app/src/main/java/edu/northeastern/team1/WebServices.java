@@ -131,17 +131,17 @@ public class WebServices extends AppCompatActivity {
 
                     // get show description
                     String description = show.getString("summary")
-                                             .replace("null", "N/A");
+                            .replace("null", "N/A");
 
                     // get average rating
                     JSONObject rating = show.getJSONObject("rating");
                     String avg_rating = rating.getString("average")
-                                              .replace("null", "N/A");
+                            .replace("null", "N/A");
 
 
                     // get image link
                     String img_link = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/" +
-                                      "No_image_available.svg/2048px-No_image_available.svg.png";
+                            "No_image_available.svg/2048px-No_image_available.svg.png";
                     try {
                         JSONObject image = show.getJSONObject("image");
                         img_link = image.getString("medium");
@@ -152,7 +152,7 @@ public class WebServices extends AppCompatActivity {
                     //get premiere date
 
                     String date = show.getString("premiered").replace("null",
-                                        "N/A");
+                            "N/A");
                     String year = date.equals("N/A") ?
                             "N/A" : date.split("-")[0];
 
@@ -241,7 +241,7 @@ public class WebServices extends AppCompatActivity {
 
         // add divided b/w links
         DividerItemDecoration decor = new DividerItemDecoration(this,
-                                                                DividerItemDecoration.VERTICAL);
+                DividerItemDecoration.VERTICAL);
         showRecycler.addItemDecoration(decor);
 
     }

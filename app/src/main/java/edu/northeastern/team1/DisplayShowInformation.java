@@ -29,7 +29,7 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
 
     private List<Show> listShows;
 
-    public DisplayShowInformation(List<Show> lstshows, int position){
+    public DisplayShowInformation(List<Show> lstshows, int position) {
         listShows = lstshows;
         pos = position;
     }
@@ -61,7 +61,7 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         return inputBox.create();
     }
 
-    public void setView(){
+    public void setView() {
         Show curr = listShows.get(pos);
         String name = "Title: " + curr.getName();
         String image = curr.getPicture();
@@ -74,10 +74,10 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         title.setText(name);
 
         String des = "Description: " + curr.getDescription();
-        des= des.replaceAll("<p>", "");
-        des= des.replaceAll("</p>", "");
-        des= des.replaceAll("<b>", "");
-        des= des.replaceAll("</b>", "");
+        des = des.replaceAll("<p>", "");
+        des = des.replaceAll("</p>", "");
+        des = des.replaceAll("<b>", "");
+        des = des.replaceAll("</b>", "");
 
         description.setText(des);
 
