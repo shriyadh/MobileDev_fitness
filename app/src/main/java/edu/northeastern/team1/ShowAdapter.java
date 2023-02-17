@@ -19,9 +19,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
     private List<Show> listOfShows;
     private Context context;
     private RecycleViewClickListener listener;
-    private String title;
-    private String year;
-    private String img;
 
     public ShowAdapter(List<Show> shows, Context con) {
         this.listOfShows = shows;
@@ -47,27 +44,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
         Show curr = listOfShows.get(position);
         holder.title.setText(curr.getName());
         holder.year.setText(curr.getYear());
-        /*
-        TODO: Just loading image with Picasso prevents images
-         from glitching use instead.
-         */
+
         Picasso.get()
                 .load(curr.getPicture())
                 .into(holder.poster);
-
-//        final Handler handler = new Handler();
-//        Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                Picasso.get()
-//                        .load(curr.getPicture())
-//                        .into(holder.poster);
-//                handler.postDelayed(this, 1000);
-//            }
-//        };
-//
-//        handler.postDelayed(runnable, 1000);
-
     }
 
     @Override
