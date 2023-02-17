@@ -18,6 +18,7 @@
         >
         <activity
             android:name=".WebServices"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"

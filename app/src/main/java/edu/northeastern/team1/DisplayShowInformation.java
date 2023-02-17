@@ -25,14 +25,15 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
     private TextView rating;
     private ImageView img;
     private int pos;
+    private boolean displayingShow;
 
     private List<Show> listShows;
 
     public DisplayShowInformation(List<Show> lstshows, int position){
         listShows = lstshows;
         pos = position;
-
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         inputBox.setNegativeButton("DONE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dg, int which) {
-                // do nothing
+                displayingShow = false;
             }
         });
         img = view.findViewById(R.id.img_url);
@@ -55,6 +56,7 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         year = view.findViewById(R.id.year_txt);
 
         setView();
+        displayingShow = true;
 
         return inputBox.create();
     }
@@ -87,6 +89,12 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
 
     }
 
+    public boolean getDisplayingShowStatus() {
+        return displayingShow;
+    }
 
+    public int getPos() {
+        return this.pos;
+    }
 
 }
