@@ -3,8 +3,16 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/gino/Documents/NEU/2023/Spring/MobileAppDev-CS5520/Final Project/Keystore/Team1KeyStore')
+            storePassword 'f!7vC7KCXqmy3PzH#o'
+            keyAlias 'Team1Key'
+            keyPassword 'f!7vC7KCXqmy3PzH#o'
+        }
+    }
     namespace 'edu.northeastern.team1'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "edu.northeastern.team1"
@@ -20,6 +28,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -36,4 +45,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.squareup.picasso:picasso:2.8'
+
 }

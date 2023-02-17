@@ -1,0 +1,26 @@
+Rough outline of steps for A6
+
+- Function to handle API call
+    - grab from (ex: https://api.tvmaze.com/search/shows?q=sunny%20in)
+
+- Create layout for WebServices activity
+    - Text edit
+    - Scroll date filter picker for year (with none option)
+    - Submit Button
+    - Magnifying glass to display while querying
+
+- Set up on click for search button
+    - Open new thread
+    - Display magnifying loading icon
+    - Query api with user's input data
+    - Hand result back to main for recycler view
+
+- Recycler view
+    - Define movie layout
+        - Getters for the info we'll want to display
+    - Set on click for the rec. items
+    - On back press - are you sure verification?
+
+- Create the alert dialogue
+    - Show poster + show info
+    - Close button (and go back to rec. view list)
