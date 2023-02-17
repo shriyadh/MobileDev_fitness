@@ -1,7 +1,6 @@
 package edu.northeastern.team1;
 
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,18 +47,26 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowViewHolder> {
         Show curr = listOfShows.get(position);
         holder.title.setText(curr.getName());
         holder.year.setText(curr.getYear());
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Picasso.get()
-                        .load(curr.getPicture())
-                        .into(holder.poster);
-                handler.postDelayed(this, 1000);
-            }
-        };
+        /*
+        TODO: Just loading image with Picasso prevents images
+         from glitching use instead.
+         */
+        Picasso.get()
+                .load(curr.getPicture())
+                .into(holder.poster);
 
-        handler.postDelayed(runnable, 1000);
+//        final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                Picasso.get()
+//                        .load(curr.getPicture())
+//                        .into(holder.poster);
+//                handler.postDelayed(this, 1000);
+//            }
+//        };
+//
+//        handler.postDelayed(runnable, 1000);
 
     }
 
