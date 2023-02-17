@@ -23,15 +23,14 @@
             <TextView
                 android:id="@+id/rating_txt"
                 android:layout_width="300dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:text="@string/rating"
                 android:textColor="#121211"
-                android:layout_marginBottom="23dp"
                 app:layout_constraintBottom_toTopOf="@+id/description_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/year_txt"
-                tools:layout_editor_absoluteY="525dp" />
+                app:layout_constraintTop_toBottomOf="@+id/year_txt" />
 
             <ImageView
                 android:id="@+id/img_url"
@@ -49,28 +48,26 @@
             <TextView
                 android:id="@+id/year_txt"
                 android:layout_width="300dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:text="@string/year"
                 android:textColor="#121211"
-                android:layout_marginBottom="23dp"
                 app:layout_constraintBottom_toTopOf="@+id/rating_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_txt"
-                tools:layout_editor_absoluteY="443dp" />
+                app:layout_constraintTop_toBottomOf="@+id/title_txt" />
 
             <TextView
                 android:id="@+id/title_txt"
                 android:layout_width="300dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:text="@string/title"
                 android:textColor="#121211"
-                android:layout_marginBottom="23dp"
                 app:layout_constraintBottom_toTopOf="@+id/year_txt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_url"
-                tools:layout_editor_absoluteY="361dp" />
+                app:layout_constraintTop_toBottomOf="@+id/img_url" />
 
             <TextView
                 android:id="@+id/description_txt"

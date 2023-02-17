@@ -65,7 +65,7 @@ public class DisplayShowInformation extends AppCompatDialogFragment {
         String image = curr.getPicture();
 
         Picasso.get()
-                .load(curr.getPicture())
+                .load(image)
                 .into(img);
 
 
