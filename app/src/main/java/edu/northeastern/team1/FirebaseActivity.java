@@ -19,10 +19,6 @@ public class FirebaseActivity extends AppCompatActivity {
 //        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 //        mFirebaseAnalytics.logEvent("Gino", null);
 
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-
-        myRef.setValue("mitch_bitch");
+        // login user activity ADD HERE
     }
 }

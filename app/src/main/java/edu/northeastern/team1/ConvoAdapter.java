@@ -29,7 +29,7 @@ public class ConvoAdapter extends RecyclerView.Adapter<ConversationViewHolder> {
     @Override
     public ConversationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.show_link_obj, parent, false);
+        View view = layoutInflater.inflate(R.layout.convo_obj, parent, false);
 
         return new ConversationViewHolder(view, this.listener);
     }
