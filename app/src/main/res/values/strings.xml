@@ -13,5 +13,9 @@
     <string name="description">Description</string>
     <string name="rating">Rating</string>
     <string name="year">Year</string>
+    <string name="about">About</string>
+    <string name="stick_it">Stick It</string>
+    <string name="team_1_ONE">TEAM 1</string>
+    <string name="team_members_ngino_romanello_nmariah_maynard_nmitchell_neides_nshriya_dhaundiyal_ntae_hyeon_lee">Gino Romanello\n\nMariah Maynard\n\nMitchell Neides\n\nShriya Dhaundiyal\n\nTae Hyeon Lee</string>
 
 </resources>
