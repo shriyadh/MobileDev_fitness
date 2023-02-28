@@ -21,39 +21,29 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseActivity extends AppCompatActivity {
     private EditText curUser;
-    private Button loginbut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firebase);
-
-
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference myRef = database.getReference("users");
         curUser = findViewById(R.id.username);
-
-
-       // myRef.setValue("Mariah!");
     }
 
     public void logIn(View view) {
         String user = String.valueOf(curUser.getText()); //current username
-
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userNameRef = rootRef.child("testlogin").child(user);
+
+        // check username and create and store into firebase if not already exist
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()) {
                     //create new user
-                    Log.v("CUR", String.valueOf(" notHERE"));
                     rootRef.child("testlogin").child(user).setValue("");
                 }
                 else{
                     Log.v("CUR", String.valueOf("HERE"));
-
                 }
             }
 
