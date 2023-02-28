@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "16814935900",
+    "project_id": "mobiledev-fitness",
+    "storage_bucket": "mobiledev-fitness.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16814935900:android:effd1b1a6a01d7d9ec7b99",
+        "android_client_info": {
+          "package_name": "edu.northeastern.team1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16814935900-rltj2qb0akqsdgc19c9oo07lubuve86e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDI2JcnqCvmuBmnshlMsA-gMrxW4NGIzaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16814935900-rltj2qb0akqsdgc19c9oo07lubuve86e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
