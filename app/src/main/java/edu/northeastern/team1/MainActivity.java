@@ -18,4 +18,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, WebServices.class);
         startActivity(intent);
     }
+
+    public void firebaseActivity(View view) {
+        Intent intent = new Intent(this, FirebaseActivity.class);
+        startActivity(intent);
+    }
 }

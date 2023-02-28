@@ -13,5 +13,7 @@
     <string name="description">Description</string>
     <string name="rating">Rating</string>
     <string name="year">Year</string>
+    <string name="about">About</string>
+    <string name="stick_it">Stick It</string>
 
 </resources>
