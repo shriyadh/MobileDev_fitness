@@ -1,6 +1,7 @@
 package edu.northeastern.team1;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Logger;
 
 
 public class FirebaseActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class FirebaseActivity extends AppCompatActivity {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users");
+        curUser = findViewById(R.id.username);
 
 
         myRef.setValue("Mariah!");
@@ -36,12 +39,7 @@ public class FirebaseActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference getUsers = database.getReference("users"); // ref to all the users
         DatabaseReference current = getUsers.child(user);
-        if (current == null) {
-            getUsers.setValue(current);
-        }
-        else {
-
-        }
+        Log.v("CUR", String.valueOf(current));
 
 
     }
