@@ -37,8 +37,7 @@ public class ConvoAdapter extends RecyclerView.Adapter<ConversationViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ConversationViewHolder holder, int position) {
         Conversations curr = listOfUsers.get(position);
-        //holder.title.setText(curr.getName());
-        //holder.year.setText(curr.getYear());
+        holder.user_name.setText(curr.getUser());
 
         // insert sticker here
         //Picasso.get().load(curr.getPicture()).into(holder.poster);

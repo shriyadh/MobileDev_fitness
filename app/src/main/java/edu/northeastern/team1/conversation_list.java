@@ -1,5 +1,6 @@
 package edu.northeastern.team1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,10 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +47,27 @@ public class conversation_list extends AppCompatActivity {
     }
 
     public void runFirebase(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users_shriya");
+        Log.d("u", "users" + users);
+        users.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot userData : snapshot.getChildren()) {
+                    Conversations convo = null;
+                    listOfUsers.add(convo);
+                }
+                Log.d("RYN", "here " + listOfUsers.size());
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
 
     }
