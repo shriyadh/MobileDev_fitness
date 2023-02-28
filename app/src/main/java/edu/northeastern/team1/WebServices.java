@@ -210,6 +210,8 @@ public class WebServices extends AppCompatActivity {
             saveThis.putString("UNIQUE_ID" + i + "5", listOfShows.get(i).getRating());
 
         }
+
+
         super.onSaveInstanceState(saveThis);
     }
 

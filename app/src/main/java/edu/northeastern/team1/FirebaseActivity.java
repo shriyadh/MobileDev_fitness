@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,13 +28,21 @@ public class FirebaseActivity extends AppCompatActivity {
         DatabaseReference myRef = database.getReference("users");
 
 
-        myRef.setValue("Hello, World!");
+        myRef.setValue("Mariah!");
     }
 
     public void logIn(View view) {
-        String user = String.valueOf(curUser.getText());
+        String user = String.valueOf(curUser.getText()); //current username
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference getUsers = database.getReference("users");
+        DatabaseReference getUsers = database.getReference("users"); // ref to all the users
+        DatabaseReference current = getUsers.child(user);
+        if (current == null) {
+            getUsers.setValue(current);
+        }
+        else {
+
+        }
+
 
     }
 
