@@ -49,6 +49,7 @@ public class FirebaseActivity extends AppCompatActivity {
                 if(!dataSnapshot.exists()) {
                     //create new user
                     Log.v("CUR", String.valueOf(" notHERE"));
+                    rootRef.child("testlogin").child(user).setValue("");
                 }
                 else{
                     Log.v("CUR", String.valueOf("HERE"));
