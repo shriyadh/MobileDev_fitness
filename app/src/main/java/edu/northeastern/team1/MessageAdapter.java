@@ -31,8 +31,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
 
         Message currentMessage = messageList.get(position);
-        holder.sentBy.setText(currentMessage.getSentBy());
+        holder.sentBy.setText(currentMessage.getSender());
         // TODO: Get image url from Database
+
         Picasso.get()
                 .load(currentMessage.getImage())
                 .into(holder.image);

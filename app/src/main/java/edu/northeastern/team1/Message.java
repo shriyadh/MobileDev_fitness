@@ -2,12 +2,12 @@ package edu.northeastern.team1;
 
 public class Message {
     private Integer mid;
-    private String sentBy;
+    private String sender;
     private String image;
 
-    public Message(Integer mid, String sentBy, String image) {
+    public Message(Integer mid, String sender, String image) {
         this.mid = mid;
-        this.sentBy = sentBy;
+        this.sender = sender;
         this.image = image;
     }
 
@@ -15,8 +15,8 @@ public class Message {
         return mid;
     }
 
-    public String getSentBy() {
-        return sentBy;
+    public String getSender() {
+        return sender;
     }
 
     public String getImage() {

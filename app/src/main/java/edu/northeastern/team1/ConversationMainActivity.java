@@ -19,10 +19,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ConversationMainActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
@@ -40,7 +39,6 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     private static final String SIZE_OF_MESSAGES = "SIZE_OF_MESSAGES";
     private static final String MESSAGE_INSTANCE_KEY = "MESSAGE_INSTANCE_KEY";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +79,7 @@ public class ConversationMainActivity extends AppCompatActivity {
                                 allMsgRef.add(eachMsg);
                             }
                         }
+                        createMessageList();
                     }
 
                     @Override
@@ -90,7 +89,6 @@ public class ConversationMainActivity extends AppCompatActivity {
                     }
                 };
                 messages.addListenerForSingleValueEvent(eventListener);
-
                 System.out.println(messages);
 
 
@@ -108,7 +106,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         outState.putInt(SIZE_OF_MESSAGES, length);
         for (int i = 0; i < length; i++) {
             outState.putInt(MESSAGE_INSTANCE_KEY + i + "0", messageList.get(i).getMid());
-            outState.putString(MESSAGE_INSTANCE_KEY + i + "1", messageList.get(i).getSentBy());
+            outState.putString(MESSAGE_INSTANCE_KEY + i + "1", messageList.get(i).getSender());
             outState.putString(MESSAGE_INSTANCE_KEY + i + "2", messageList.get(i).getImage());
         }
 
@@ -158,7 +156,6 @@ public class ConversationMainActivity extends AppCompatActivity {
         int clickId = view.getId();
         if (clickId == dogsButton.getId()) {
             retreiveData(view);
-
         } else if (clickId == foodButton.getId()) {
 
         } else if (clickId == raceCarButton.getId()) {
@@ -167,4 +164,21 @@ public class ConversationMainActivity extends AppCompatActivity {
 
         }
     }
+
+    public void createMessageList() {
+        for (DataSnapshot message: allMsgRef) {
+            int mid = Integer.parseInt(Objects.requireNonNull(message.getKey()));
+            String sender = message.child("sender").getValue(String.class);
+            String image = message.child("image").getValue(String.class);
+
+            Message newMessage = new Message(mid, sender, image);
+
+            System.out.println("New Message:" + newMessage);
+
+            messageList.add(newMessage);
+            messageAdapter.notifyItemInserted(messageList.size());
+        }
+//        System.out.println("Message List" + messageList);
+    }
+
 }
