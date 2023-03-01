@@ -26,8 +26,8 @@ public class conversation_list extends AppCompatActivity {
     private List<Conversations> listOfUsers = new ArrayList<>();
     private ConvoAdapter adapter;
     private EditText searchBar;
-    private String url;
-    private final Handler handler = new Handler();
+
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +47,16 @@ public class conversation_list extends AppCompatActivity {
     }
 
     public void runFirebase(){
-        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users_shriya");
-        Log.d("u", "users" + users);
-        users.addValueEventListener(new ValueEventListener() {
+        this.databaseReference = FirebaseDatabase.getInstance().getReference();
+        //Log.d("u", "users" + users);
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listOfUsers.clear();
+                for(DataSnapshot userData : snapshot.child("users_shriya").getChildren()) {
 
-                for(DataSnapshot userData : snapshot.getChildren()) {
-                    Conversations convo = null;
+                    final String name = userData.getValue(String.class);
+                    Conversations convo = new Conversations(name,"0");
                     listOfUsers.add(convo);
                 }
                 Log.d("RYN", "here " + listOfUsers.size());
