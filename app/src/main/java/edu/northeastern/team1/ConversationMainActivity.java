@@ -1,6 +1,7 @@
 package edu.northeastern.team1;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +12,15 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +28,7 @@ public class ConversationMainActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
     private List<Message> messageList = new ArrayList<>();
     private MessageAdapter messageAdapter;
+    public List<DataSnapshot> allMsgRef = new ArrayList<>();
 
     private int chatID;
     private TextView chatName;
@@ -43,6 +54,51 @@ public class ConversationMainActivity extends AppCompatActivity {
         this.foodButton = findViewById(R.id.foodButton);
         this.raceCarButton = findViewById(R.id.racecarButton);
         this.sunsetButton = findViewById(R.id.sunsetButton);
+    }
+
+    public void retreiveData(View v){
+        runnableThread runnableThread = new runnableThread();
+        runnableThread.setCid(1);
+        new Thread(runnableThread).start();
+    }
+
+    class runnableThread implements Runnable {
+        private Integer cid;
+
+        public void setCid(int cid) {this.cid = cid;}
+
+        @Override
+        public void run() {
+            try{
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference messages = rootRef.child("messages").child(String.valueOf(this.cid));
+
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            for (DataSnapshot eachMsg:snapshot.getChildren()) {
+                                allMsgRef.add(eachMsg);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("error");
+                        Log.d("tag", error.getMessage());
+                    }
+                };
+                messages.addListenerForSingleValueEvent(eventListener);
+
+                System.out.println(messages);
+
+
+
+            } catch (DatabaseException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -78,6 +134,9 @@ public class ConversationMainActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     private void setUpRecycler() {
         messageRecycler = findViewById(R.id.messageRecycler);
         messageRecycler.setHasFixedSize(true);
@@ -98,6 +157,7 @@ public class ConversationMainActivity extends AppCompatActivity {
     public void onClick(View view) {
         int clickId = view.getId();
         if (clickId == dogsButton.getId()) {
+            retreiveData(view);
 
         } else if (clickId == foodButton.getId()) {
 
