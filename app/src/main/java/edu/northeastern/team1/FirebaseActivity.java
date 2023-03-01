@@ -61,7 +61,7 @@ public class FirebaseActivity extends AppCompatActivity {
     }
 
     public void logIn(View view) {
-        this.user = String.valueOf(curUser.getText()); //current username
+        this.user = String.valueOf(curUser.getText()).toLowerCase(); //current username
         String verifiedName = createUser(user);
         if (verifiedName==null){
             return;
@@ -69,6 +69,7 @@ public class FirebaseActivity extends AppCompatActivity {
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userName = rootRef.child("testlogin").child(user);
+
 
         // check username and create and store into firebase if not already exist
         ValueEventListener eventListener = new ValueEventListener() {
