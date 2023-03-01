@@ -57,7 +57,6 @@ public class FirebaseActivity extends AppCompatActivity {
             return this.user;
         }
         return user;
-
     }
 
     public void logIn(View view) {

@@ -28,4 +28,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AboutTeam.class);
         startActivity(intent);
     }
+
 }

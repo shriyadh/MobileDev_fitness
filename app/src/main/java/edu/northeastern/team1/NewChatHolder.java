@@ -1,23 +1,20 @@
 package edu.northeastern.team1;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ShowViewHolder extends RecyclerView.ViewHolder {
-    public TextView title;
-    public TextView year;
-    public ImageView poster;
+public class NewChatHolder extends RecyclerView.ViewHolder {
+    public TextView username;
 
-    public ShowViewHolder(View view, RecycleViewClickListener lst) {
+    public NewChatHolder(View view, RecycleViewClickListener lst) {
         super(view);
-        this.title = view.findViewById(R.id.tv_name);
-        this.year = view.findViewById(R.id.tv_show_year);
-        this.poster = view.findViewById(R.id.stickerImage);
+        // find ids and attach
+        this.username = view.findViewById(R.id.usernameNewChat);
 
-        // set onClick listener on specific obj
+
+        // set onClick here
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -29,3 +26,4 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
         });
     }
 }
+
