@@ -39,8 +39,7 @@ public class StickerLedgerActivity extends AppCompatActivity {
         this.useCounts = new HashMap<>();
 
         // get logged in user
-//        loggedInUser = intent.getStringExtra("Current_user");
-        loggedInUser = "mitch";
+        loggedInUser = intent.getStringExtra("Current_user");
         setUpRecycler(savedInstanceState);
 
         getFirebaseImages();
