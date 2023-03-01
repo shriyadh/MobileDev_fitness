@@ -11,7 +11,7 @@
         android:id="@+id/textViewUsername"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="#673AB7"
+        android:background="#FFFFFF"
         android:gravity="center"
         android:text="@string/username"
         android:textSize="24sp"

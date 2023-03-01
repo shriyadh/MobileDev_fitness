@@ -44,6 +44,9 @@ public class ConversationMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation_main);
 
+        retrieveData();
+        retrieveImageData();
+
         init(savedInstanceState);
 
         this.chatName = findViewById(R.id.textViewUsername);
@@ -54,7 +57,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         this.sunsetButton = findViewById(R.id.sunsetButton);
     }
 
-    public void retreiveData(View v){
+    public void retrieveData(){
         runnableThread runnableThread = new runnableThread();
         runnableThread.setCid(1);
         new Thread(runnableThread).start();
@@ -95,6 +98,11 @@ public class ConversationMainActivity extends AppCompatActivity {
         }
     }
 
+    public void retrieveImageData() {
+        imageThread imageThread = new imageThread();
+        new Thread(imageThread).start();
+    }
+
     class imageThread implements Runnable {
         @Override
         public void run() {
@@ -102,21 +110,22 @@ public class ConversationMainActivity extends AppCompatActivity {
                 DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
                 DatabaseReference images = rootRef.child("images");
 
-                ValueEventListener valueEventListener = new ValueEventListener() {
+                images.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             for (DataSnapshot image: snapshot.getChildren()) {
-
+                                String imageID = image.getKey();
+                                String imageUrl = image.getValue(String.class);
+                                imageHash.put(imageID, imageUrl);
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Log.v("Image Database Error", error.getMessage());
                     }
-                };
+                });
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
@@ -179,7 +188,7 @@ public class ConversationMainActivity extends AppCompatActivity {
     public void onClick(View view) {
         int clickId = view.getId();
         if (clickId == dogsButton.getId()) {
-            retreiveData(view);
+
         } else if (clickId == foodButton.getId()) {
 
         } else if (clickId == raceCarButton.getId()) {
@@ -193,7 +202,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         for (DataSnapshot message: allMsgRef) {
             int mid = Integer.parseInt(Objects.requireNonNull(message.getKey()));
             String sender = message.child("sender").getValue(String.class);
-            String image = message.child("image").getValue(String.class);
+            String image = imageHash.get(message.child("image").getValue(String.class));
 
             Message newMessage = new Message(mid, sender, image);
 
