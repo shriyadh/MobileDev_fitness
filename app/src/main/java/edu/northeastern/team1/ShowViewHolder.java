@@ -1,13 +1,10 @@
 package edu.northeastern.team1;
 
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Picasso;
 
 public class ShowViewHolder extends RecyclerView.ViewHolder {
     public TextView title;
@@ -18,7 +15,7 @@ public class ShowViewHolder extends RecyclerView.ViewHolder {
         super(view);
         this.title = view.findViewById(R.id.tv_name);
         this.year = view.findViewById(R.id.tv_show_year);
-        this.poster = view.findViewById(R.id.imageView);
+        this.poster = view.findViewById(R.id.stickerImage);
 
         // set onClick listener on specific obj
         view.setOnClickListener(new View.OnClickListener() {
