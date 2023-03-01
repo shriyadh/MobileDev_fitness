@@ -50,12 +50,17 @@ public class ConversationMainActivity extends AppCompatActivity {
         String chatId = i.getStringExtra("chatID");
         String curUser = i.getStringExtra("Logged_user");
 
-        // Grabbing msgs from firebase using thread
-        runnableThread runnableThread = new runnableThread();
-        runnableThread.setCid(Integer.parseInt(chatId));
-        new Thread(runnableThread).start();
+//        // Getting images from firebase and store in the hashmap
+//        imageThread imageThread = new imageThread();
+//        new Thread(imageThread).start();
+//
+//        // Grabbing msgs from firebase using thread
+//        runnableThread runnableThread = new runnableThread();
+//        runnableThread.setCid(Integer.parseInt(chatId));
+//        new Thread(runnableThread).start();
 
-        init(savedInstanceState);
+
+        init(savedInstanceState, curUser, chatId);
 
         this.chatName = findViewById(R.id.textViewUsername);
 
@@ -101,10 +106,6 @@ public class ConversationMainActivity extends AppCompatActivity {
         }
     }
 
-    public void retrieveImageData() {
-        imageThread imageThread = new imageThread();
-        new Thread(imageThread).start();
-    }
 
     class imageThread implements Runnable {
         @Override
@@ -149,9 +150,21 @@ public class ConversationMainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    public void init(Bundle savedInstanceState) {
+    public void init(Bundle savedInstanceState, String loggedIn, String chatID) {
         loadSavedInstance(savedInstanceState);
+
+        // Getting images from firebase and store in the hashmap
+        imageThread imageThread = new imageThread();
+        new Thread(imageThread).start();
+
+        // Grabbing msgs from firebase using thread
+        runnableThread runnableThread = new runnableThread();
+        runnableThread.setCid(Integer.parseInt(chatID));
+        new Thread(runnableThread).start();
+
         setUpRecycler();
+
+
     }
 
     private void loadSavedInstance(Bundle savedInstanceState) {
