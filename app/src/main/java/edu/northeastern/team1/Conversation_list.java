@@ -32,14 +32,13 @@ public class Conversation_list extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        loggedInUser = intent.getStringExtra("Current_user");
 
+        // get logged in user
+        loggedInUser = intent.getStringExtra("Current_user");
         setContentView(R.layout.activity_conversation_list);
 
         // load things from onSavedInstance on orientation change
         init(savedInstanceState);
-
-        //this.searchBar = findViewById(R.id.EditText_TV_searchbar);
 
         // Write a message to the database
         runFirebase();
@@ -51,18 +50,30 @@ public class Conversation_list extends AppCompatActivity {
 
 
         this.databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userName = databaseReference.child("users");
+        DatabaseReference userName = databaseReference.child("members");
 
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listOfUsers.clear();
 
-                for(DataSnapshot userData : snapshot.getChildren()) {
-                    String name = userData.getKey();
+                if(snapshot.exists()) {
+                    for(DataSnapshot userData : snapshot.getChildren()) {
+                        List<String> users = new ArrayList<>();
+                        for(DataSnapshot curr : userData.getChildren()) {
+                            String a = curr.getKey();
+                            users.add(a);
+                        }
+                        System.out.println("here" + users.get(0) );
+                        System.out.println("here" + users.get(1) );
 
-                    Conversations convo = new Conversations(name,"0");
-                    listOfUsers.add(convo);
+                        Conversations conversation = new Conversations("name","0");
+                        listOfUsers.add(conversation);
+
+
+                    }
+
+
+
                 }
 
                 adapter.notifyItemRangeInserted(0, listOfUsers.size());
