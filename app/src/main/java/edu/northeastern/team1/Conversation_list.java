@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Conversation_list extends AppCompatActivity {
 
@@ -27,6 +29,7 @@ public class Conversation_list extends AppCompatActivity {
     private ConvoAdapter adapter;
     private String loggedInUser;
     private DatabaseReference databaseReference;
+    private TextView convTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,8 @@ public class Conversation_list extends AppCompatActivity {
         // get logged in user
         loggedInUser = intent.getStringExtra("Current_user");
         setContentView(R.layout.activity_conversation_list);
-
+        convTitle = findViewById(R.id.Conversations);
+        convTitle.setText("CONVERSATIONS FOR " + loggedInUser.toUpperCase(Locale.ROOT));
         // load things from onSavedInstance on orientation change
         init(savedInstanceState);
 
@@ -48,7 +52,6 @@ public class Conversation_list extends AppCompatActivity {
 
     public void runFirebase(){
 
-
         this.databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userName = databaseReference.child("members");
 
@@ -58,22 +61,31 @@ public class Conversation_list extends AppCompatActivity {
 
                 if(snapshot.exists()) {
                     for(DataSnapshot userData : snapshot.getChildren()) {
+
                         List<String> users = new ArrayList<>();
+
                         for(DataSnapshot curr : userData.getChildren()) {
                             String a = curr.getKey();
                             users.add(a);
                         }
-                        System.out.println("here" + users.get(0) );
-                        System.out.println("here" + users.get(1) );
 
-                        Conversations conversation = new Conversations("name","0");
-                        listOfUsers.add(conversation);
-
+                        if(users.contains(loggedInUser)) {
+                            String id = userData.getKey();
+                            String add_user = "";
+                            for(String name : users){
+                                if(!name.equals(loggedInUser)){
+                                    add_user = name;
+                                }
+                            }
+                            Conversations conversation = new Conversations(add_user,id);
+                            listOfUsers.add(conversation);
+                        }
 
                     }
 
-
-
+                }
+                else{
+                    // no chats to display
                 }
 
                 adapter.notifyItemRangeInserted(0, listOfUsers.size());
@@ -124,6 +136,7 @@ public class Conversation_list extends AppCompatActivity {
         conversationRecycler.addItemDecoration(decor);
 
     }
+
 
 
 
