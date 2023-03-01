@@ -210,11 +210,29 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageAdapter.notifyItemInserted(messageList.size());
             sendImage(newMessage);
         } else if (clickId == foodButton.getId()) {
-
+            long mid = new Date().getTime();
+            String sender = "ted";
+            String image = "food";
+            Message newMessage = new Message(mid, sender, image);
+            messageList.add(newMessage);
+            messageAdapter.notifyItemInserted(messageList.size());
+            sendImage(newMessage);
         } else if (clickId == raceCarButton.getId()) {
-
+            long mid = new Date().getTime();
+            String sender = "ted";
+            String image = "race_car";
+            Message newMessage = new Message(mid, sender, image);
+            messageList.add(newMessage);
+            messageAdapter.notifyItemInserted(messageList.size());
+            sendImage(newMessage);
         } else if (clickId == sunsetButton.getId()) {
-
+            long mid = new Date().getTime();
+            String sender = "ted";
+            String image = "sunset";
+            Message newMessage = new Message(mid, sender, image);
+            messageList.add(newMessage);
+            messageAdapter.notifyItemInserted(messageList.size());
+            sendImage(newMessage);
         }
     }
 
@@ -235,7 +253,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         new Thread(sendThread).start();
     }
 
-    class sendThread implements Runnable {
+    static class sendThread implements Runnable {
         private Message message;
         public void setMessage(Message message) {
             this.message = message;
