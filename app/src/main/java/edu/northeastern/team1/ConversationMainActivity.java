@@ -20,14 +20,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class ConversationMainActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
     private List<Message> messageList = new ArrayList<>();
-    private MessageAdapter messageAdapter;
     public List<DataSnapshot> allMsgRef = new ArrayList<>();
+    private HashMap<String, String> imageHash = new HashMap<>();
+    private MessageAdapter messageAdapter;
     private TextView chatName;
 
     private Button dogsButton;
@@ -88,6 +90,34 @@ public class ConversationMainActivity extends AppCompatActivity {
                 };
                 messages.addListenerForSingleValueEvent(eventListener);
             } catch (DatabaseException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class imageThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference images = rootRef.child("images");
+
+                ValueEventListener valueEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot image: snapshot.getChildren()) {
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                };
+            } catch (DatabaseException e) {
                 e.printStackTrace();
             }
         }
