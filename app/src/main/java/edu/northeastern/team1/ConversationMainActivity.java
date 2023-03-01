@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -142,7 +143,7 @@ public class ConversationMainActivity extends AppCompatActivity {
 
         outState.putInt(SIZE_OF_MESSAGES, length);
         for (int i = 0; i < length; i++) {
-            outState.putInt(MESSAGE_INSTANCE_KEY + i + "0", messageList.get(i).getMid());
+            outState.putLong(MESSAGE_INSTANCE_KEY + i + "0", messageList.get(i).getMid());
             outState.putString(MESSAGE_INSTANCE_KEY + i + "1", messageList.get(i).getSender());
             outState.putString(MESSAGE_INSTANCE_KEY + i + "2", messageList.get(i).getImage());
         }
@@ -171,7 +172,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         if (savedInstanceState != null && savedInstanceState.containsKey(SIZE_OF_MESSAGES)) {
             int length = savedInstanceState.getInt(SIZE_OF_MESSAGES);
             for (int i = 0; i < length; i++) {
-                Integer mid = savedInstanceState.getInt(MESSAGE_INSTANCE_KEY + i + "0");
+                long mid = savedInstanceState.getLong(MESSAGE_INSTANCE_KEY + i + "0");
                 String sentBy = savedInstanceState.getString(MESSAGE_INSTANCE_KEY + i + "1");
                 String image = savedInstanceState.getString(MESSAGE_INSTANCE_KEY + i + "2");
 
@@ -180,9 +181,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
 
     private void setUpRecycler() {
         messageRecycler = findViewById(R.id.messageRecycler);
@@ -204,7 +202,13 @@ public class ConversationMainActivity extends AppCompatActivity {
     public void onClick(View view) {
         int clickId = view.getId();
         if (clickId == dogsButton.getId()) {
-
+            long mid = new Date().getTime();
+            String sender = "ted";
+            String image = "dog";
+            Message newMessage = new Message(mid, sender, image);
+            messageList.add(newMessage);
+            messageAdapter.notifyItemInserted(messageList.size());
+            sendImage(newMessage);
         } else if (clickId == foodButton.getId()) {
 
         } else if (clickId == raceCarButton.getId()) {
@@ -216,16 +220,32 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     public void createMessageList() {
         for (DataSnapshot message: allMsgRef) {
-            int mid = Integer.parseInt(Objects.requireNonNull(message.getKey()));
+            long mid = Long.parseLong(Objects.requireNonNull(message.getKey()));
             String sender = message.child("sender").getValue(String.class);
             String image = imageHash.get(message.child("image").getValue(String.class));
-
             Message newMessage = new Message(mid, sender, image);
-
-            System.out.println("New Message:" + newMessage);
-
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
+        }
+    }
+
+    private void sendImage(Message message) {
+        sendThread sendThread = new sendThread();
+        sendThread.setMessage(message);
+        new Thread(sendThread).start();
+    }
+
+    class sendThread implements Runnable {
+        private Message message;
+        public void setMessage(Message message) {
+            this.message = message;
+        }
+        @Override
+        public void run() {
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference chat = rootRef.child("messages").child("1");
+            chat.setValue(message.getMid());
+
         }
     }
 
