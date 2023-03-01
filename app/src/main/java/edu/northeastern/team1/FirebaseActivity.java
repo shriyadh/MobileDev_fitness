@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseActivity extends AppCompatActivity {
     private EditText curUser;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class FirebaseActivity extends AppCompatActivity {
     }
 
     public void logIn(View view) {
-        String user = String.valueOf(curUser.getText()); //current username
+        this.user = String.valueOf(curUser.getText()); //current username
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userName = rootRef.child("testlogin").child(user);
 
@@ -43,9 +44,6 @@ public class FirebaseActivity extends AppCompatActivity {
                     //create new user
                     rootRef.child("testlogin").child(user).setValue("");
                 }
-
-
-
             }
 
             @Override
@@ -60,6 +58,7 @@ public class FirebaseActivity extends AppCompatActivity {
 
         // allow user to log in
          Intent intent = new Intent(this , Conversation_list.class);
+         intent.putExtra("Current_user", user);
          startActivity(intent);
 
 

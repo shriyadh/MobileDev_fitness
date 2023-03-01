@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -24,13 +25,15 @@ public class Conversation_list extends AppCompatActivity {
     private RecyclerView conversationRecycler;
     private List<Conversations> listOfUsers = new ArrayList<>();
     private ConvoAdapter adapter;
-    private EditText searchBar;
-
+    private String loggedInUser;
     private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        loggedInUser = intent.getStringExtra("Current_user");
+
         setContentView(R.layout.activity_conversation_list);
 
         // load things from onSavedInstance on orientation change
