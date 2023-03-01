@@ -28,8 +28,6 @@ public class ConversationMainActivity extends AppCompatActivity {
     private List<Message> messageList = new ArrayList<>();
     private MessageAdapter messageAdapter;
     public List<DataSnapshot> allMsgRef = new ArrayList<>();
-
-    private int chatID;
     private TextView chatName;
 
     private Button dogsButton;
@@ -89,10 +87,6 @@ public class ConversationMainActivity extends AppCompatActivity {
                     }
                 };
                 messages.addListenerForSingleValueEvent(eventListener);
-                System.out.println(messages);
-
-
-
             } catch (DatabaseException e){
                 e.printStackTrace();
             }
@@ -178,7 +172,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
         }
-//        System.out.println("Message List" + messageList);
     }
 
 }
