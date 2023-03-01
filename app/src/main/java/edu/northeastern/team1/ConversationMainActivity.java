@@ -1,5 +1,6 @@
 package edu.northeastern.team1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,8 +45,15 @@ public class ConversationMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation_main);
 
-        retrieveData();
-        retrieveImageData();
+        // grab chat_id and logged in user from previous activity
+        Intent i = getIntent();
+        String chatId = i.getStringExtra("chatID");
+        String curUser = i.getStringExtra("Logged_user");
+
+        // Grabbing msgs from firebase using thread
+        runnableThread runnableThread = new runnableThread();
+        runnableThread.setCid(Integer.parseInt(chatId));
+        new Thread(runnableThread).start();
 
         init(savedInstanceState);
 
@@ -57,11 +65,6 @@ public class ConversationMainActivity extends AppCompatActivity {
         this.sunsetButton = findViewById(R.id.sunsetButton);
     }
 
-    public void retrieveData(){
-        runnableThread runnableThread = new runnableThread();
-        runnableThread.setCid(1);
-        new Thread(runnableThread).start();
-    }
 
     class runnableThread implements Runnable {
         private Integer cid;

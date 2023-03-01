@@ -140,7 +140,7 @@ public class Conversation_list extends AppCompatActivity {
             public void onLinkClick(int position) {
                 // start message box activity
                 String chatID = listOfUsers.get(position).getConversation_id();
-                Intent startChat = new Intent(getWindow().getContext(), Test.class);
+                Intent startChat = new Intent(getWindow().getContext(), ConversationMainActivity.class);
                 startChat.putExtra("Logged_user", loggedInUser);
 
                 startChat.putExtra("chatID", chatID);

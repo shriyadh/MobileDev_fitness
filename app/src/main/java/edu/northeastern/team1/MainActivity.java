@@ -29,8 +29,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void testConversation(View view){
-        Intent intent = new Intent(this, ConversationMainActivity.class);
-        startActivity(intent);
-    }
 }
