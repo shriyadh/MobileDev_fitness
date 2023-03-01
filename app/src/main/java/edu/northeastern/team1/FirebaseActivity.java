@@ -43,11 +43,11 @@ public class FirebaseActivity extends AppCompatActivity {
                     //create new user
                     rootRef.child("testlogin").child(user).setValue("");
                 }
-                else{
-                    // allow user to log in
-                    // Intent intent = new Intent(this,);
-                    // startActivity(intent);
-                }
+
+                // allow user to log in
+                // Intent intent = new Intent(this,);
+                // startActivity(intent);
+
             }
 
             @Override
