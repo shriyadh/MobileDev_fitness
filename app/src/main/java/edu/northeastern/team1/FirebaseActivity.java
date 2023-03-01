@@ -1,5 +1,6 @@
 package edu.northeastern.team1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +33,7 @@ public class FirebaseActivity extends AppCompatActivity {
     public void logIn(View view) {
         String user = String.valueOf(curUser.getText()); //current username
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userNameRef = rootRef.child("testlogin").child(user);
+        DatabaseReference userName = rootRef.child("testlogin").child(user);
 
         // check username and create and store into firebase if not already exist
         ValueEventListener eventListener = new ValueEventListener() {
@@ -43,7 +44,9 @@ public class FirebaseActivity extends AppCompatActivity {
                     rootRef.child("testlogin").child(user).setValue("");
                 }
                 else{
-                    Log.v("CUR", String.valueOf("HERE"));
+                    // allow user to log in
+                    // Intent intent = new Intent(this,);
+                    // startActivity(intent);
                 }
             }
 
@@ -52,7 +55,7 @@ public class FirebaseActivity extends AppCompatActivity {
                 Log.d("tag", databaseError.getMessage()); //Don't ignore errors!
             }
         };
-        userNameRef.addListenerForSingleValueEvent(eventListener);
+        userName.addListenerForSingleValueEvent(eventListener);
 
 
     }
