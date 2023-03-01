@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +30,8 @@ public class Conversation_list extends AppCompatActivity {
     private String loggedInUser;
     private DatabaseReference databaseReference;
     private TextView convTitle;
+    private FloatingActionButton fBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class Conversation_list extends AppCompatActivity {
 
         // Write a message to the database
         runFirebase();
+        createFloatingImplement();
 
 
     }
@@ -103,6 +106,19 @@ public class Conversation_list extends AppCompatActivity {
 
 
     }
+
+    private void createFloatingImplement(){
+        fBtn = (FloatingActionButton) findViewById(R.id.floatingBtnAddLinks);
+        fBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // creating the alert dialog box
+                NewChat input = new NewChat();
+                input.show(getSupportFragmentManager(), "New Chat");
+            }
+        });
+
+    }
     public void init(Bundle savedInstanceState) {
         //loadSavedInstance(savedInstanceState);
         setUpRecycler();
@@ -122,10 +138,14 @@ public class Conversation_list extends AppCompatActivity {
         RecycleViewClickListener listener = new RecycleViewClickListener() {
             @Override
             public void onLinkClick(int position) {
-                // add functionality for opening alert dialog box to display information
-               // DisplayShowInformation display = new DisplayShowInformation(listOfUsers, position);
-               // display.show(getSupportFragmentManager(), "Show Information");
-                //Window window = display.getDialog().getWindow();
+                // start message box activity
+                String chatID = listOfUsers.get(position).getConversation_id();
+                Intent startChat = new Intent(getWindow().getContext(), Test.class);
+                startChat.putExtra("Logged_user", loggedInUser);
+
+                startChat.putExtra("chatID", chatID);
+                startActivity(startChat);
+
             }
         };
         adapter.setListenerLink(listener);
