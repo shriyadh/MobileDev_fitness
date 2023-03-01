@@ -243,8 +243,11 @@ public class ConversationMainActivity extends AppCompatActivity {
         @Override
         public void run() {
             DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference chat = rootRef.child("messages").child("1");
-            chat.setValue(message.getMid());
+            DatabaseReference chatID = rootRef.child("messages").child("3");
+            chatID.child(message.getMid().toString());
+            DatabaseReference messageID = chatID.child(message.getMid().toString());
+            messageID.child("image").setValue(message.getImage());
+            messageID.child("sender").setValue(message.getSender());
 
         }
     }
