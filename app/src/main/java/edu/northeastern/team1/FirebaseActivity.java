@@ -44,9 +44,7 @@ public class FirebaseActivity extends AppCompatActivity {
                     rootRef.child("testlogin").child(user).setValue("");
                 }
 
-                // allow user to log in
-                // Intent intent = new Intent(this,);
-                // startActivity(intent);
+
 
             }
 
@@ -55,7 +53,16 @@ public class FirebaseActivity extends AppCompatActivity {
                 Log.d("tag", databaseError.getMessage()); //Don't ignore errors!
             }
         };
+
+
         userName.addListenerForSingleValueEvent(eventListener);
+
+
+        // allow user to log in
+         Intent intent = new Intent(this , Conversation_list.class);
+         startActivity(intent);
+
+
 
 
     }

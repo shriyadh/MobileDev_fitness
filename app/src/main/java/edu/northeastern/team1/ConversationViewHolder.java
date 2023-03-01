@@ -6,14 +6,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ConversationViewHolder extends RecyclerView.ViewHolder {
-    public TextView user_name;
+    public TextView username;
 
     // add views jere
 
     public ConversationViewHolder(View view, RecycleViewClickListener lst) {
         super(view);
         // find ids and attach
-        this.user_name = view.findViewById(R.id.username);
+        this.username = view.findViewById(R.id.username);
 
 
         // set onClick here

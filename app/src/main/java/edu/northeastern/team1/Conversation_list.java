@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -20,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class conversation_list extends AppCompatActivity {
+public class Conversation_list extends AppCompatActivity {
 
     private RecyclerView conversationRecycler;
     private List<Conversations> listOfUsers = new ArrayList<>();
@@ -37,7 +36,6 @@ public class conversation_list extends AppCompatActivity {
         // load things from onSavedInstance on orientation change
         init(savedInstanceState);
 
-
         //this.searchBar = findViewById(R.id.EditText_TV_searchbar);
 
         // Write a message to the database
@@ -47,29 +45,35 @@ public class conversation_list extends AppCompatActivity {
     }
 
     public void runFirebase(){
+
+
         this.databaseReference = FirebaseDatabase.getInstance().getReference();
-        //Log.d("u", "users" + users);
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference userName = databaseReference.child("users");
+
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listOfUsers.clear();
-                for(DataSnapshot userData : snapshot.child("users_shriya").getChildren()) {
 
-                    final String name = userData.getValue(String.class);
+                for(DataSnapshot userData : snapshot.getChildren()) {
+                    String name = userData.getKey();
+
                     Conversations convo = new Conversations(name,"0");
                     listOfUsers.add(convo);
                 }
-                Log.d("RYN", "here " + listOfUsers.size());
 
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeInserted(0, listOfUsers.size());
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
 
+        };
+
+        userName.addListenerForSingleValueEvent(eventListener);
 
 
     }
@@ -79,7 +83,7 @@ public class conversation_list extends AppCompatActivity {
     }
 
     private void setUpRecycler() {
-        conversationRecycler = findViewById(R.id.recyclerView);
+        conversationRecycler = findViewById(R.id.recyclerViewMessages);
         conversationRecycler.setHasFixedSize(true);
 
         // set layout
