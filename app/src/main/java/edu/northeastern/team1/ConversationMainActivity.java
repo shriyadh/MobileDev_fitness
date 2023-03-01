@@ -19,6 +19,7 @@ public class ConversationMainActivity extends AppCompatActivity {
     private List<Message> messageList = new ArrayList<>();
     private MessageAdapter messageAdapter;
 
+    private int chatID;
     private TextView chatName;
 
     private Button dogsButton;
@@ -72,6 +73,7 @@ public class ConversationMainActivity extends AppCompatActivity {
                 String image = savedInstanceState.getString(MESSAGE_INSTANCE_KEY + i + "2");
 
                 Message newMessage = new Message(mid, sentBy, image);
+                messageList.add(newMessage);
             }
         }
     }
