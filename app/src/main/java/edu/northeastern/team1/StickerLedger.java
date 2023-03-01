@@ -1,16 +1,15 @@
 package edu.northeastern.team1;
 
-import androidx.appcompat.app.AppCompatActivity;
+public class StickerLedger {
+    private String count;
+    private String url;
 
-import android.os.Bundle;
-
-public class StickerLedger extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sticker_ledger);
+    public StickerLedger(String url, String count) {
+        this.url = url;
+        this.count = count;
     }
 
+    public String getUrl(){ return this.url;}
 
+    public String getCount(){ return this.count;}
 }

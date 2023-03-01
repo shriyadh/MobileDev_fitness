@@ -28,4 +28,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AboutTeam.class);
         startActivity(intent);
     }
+
+    public void test(View view) {
+        Intent intent = new Intent(this, StickerLedgerActivity.class);
+        startActivity(intent);
+    }
 }
