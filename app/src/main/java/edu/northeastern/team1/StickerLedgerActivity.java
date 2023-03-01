@@ -85,7 +85,7 @@ public class StickerLedgerActivity extends AppCompatActivity {
                                 useCounts.put(key, count);
 
                                 String url = imageMap.get(key);
-                                StickerLedger sL = new StickerLedger(url, count);
+                                StickerLedger sL = new StickerLedger(url, "Sent count: " + count);
                                 stickerLedgerList.add(sL);
                             }
                         }

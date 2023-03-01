@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class StickerLedgerAdapter extends RecyclerView.Adapter<StickerLedgerViewHolder> {
@@ -30,6 +32,9 @@ public class StickerLedgerAdapter extends RecyclerView.Adapter<StickerLedgerView
     public void onBindViewHolder(@NonNull StickerLedgerViewHolder holder, int position) {
         StickerLedger curr = stickerLedgerList.get(position);
         holder.count.setText(curr.getCount());
+        Picasso.get()
+                .load(curr.getUrl())
+                .into(holder.image);
     }
 
     @Override
