@@ -56,16 +56,4 @@
 
         />
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Button"
-        android:onClick="test"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="155dp"
-        tools:ignore="MissingConstraints" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

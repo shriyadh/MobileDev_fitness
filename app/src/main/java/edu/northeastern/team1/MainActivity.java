@@ -29,8 +29,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void test(View view) {
-        Intent intent = new Intent(this, StickerLedgerActivity.class);
-        startActivity(intent);
-    }
 }
