@@ -1,32 +1,33 @@
 package edu.northeastern.team1;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Message {
-    private Integer messageID;
-    private String username;
-    private String imgUrl;
-    private Integer sentOn;
+    private Integer mid;
+    private String sentBy;
+    private String image;
+    private DatabaseReference mDatabase;
 
 
-    public Message(Integer messageID, String username, String imgUrl, Integer sentOn) {
-        this.messageID = messageID;
-        this.username = username;
-        this.imgUrl = imgUrl;
-        this.sentOn = sentOn;
+    public Message(Integer mid, String sentBy, String image) {
+        mDatabase = FirebaseDatabase.getInstance().getReference("messages");
+
+        this.mid = mid;
+
+        this.sentBy = sentBy;
+        this.image = image;
     }
 
-    public Integer getMessageID() {
-        return messageID;
+    public Integer getMid() {
+        return mid;
     }
 
-    public String getUsername() {
-        return username;
+    public String getSentBy() {
+        return sentBy;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public Integer getSentOn() {
-        return sentOn;
+    public String getImage() {
+        return image;
     }
 }
