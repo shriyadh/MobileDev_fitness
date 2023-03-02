@@ -1,9 +1,18 @@
 package edu.northeastern.team1;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,45 +25,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewChat  extends AppCompatDialogFragment {
-    List<String> users = new ArrayList<>();
-    private DatabaseReference ref;
-
-    private RecyclerView recycler;
-
-
-    public NewChat(){
-        getUsers();
-
-    }
-
-    public void getUsers(){
-        this.ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference allUsers = ref.child("testlogin");
-
-        ValueEventListener eventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for (DataSnapshot userData : snapshot.getChildren()) {
-                    String member = userData.getKey();
-                    users.add(member);
-                }
-                Log.v("Users", String.valueOf(users.size()));
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("tag", error.getMessage());
-
-            }
-        }
-            ;
-
-        allUsers.addListenerForSingleValueEvent(eventListener);
-
-
-    }
-
-
-
 
 }
