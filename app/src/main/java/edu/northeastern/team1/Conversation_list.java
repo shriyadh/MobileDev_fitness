@@ -141,7 +141,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
 
         DatabaseReference db1 = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference chatWith = db1.child("testlogin").child(chatUser);
+        DatabaseReference chatWith = db1.child("users").child(chatUser);
 
         //if username same as login, then try again
         // check username to see if user exists

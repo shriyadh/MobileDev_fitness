@@ -68,7 +68,7 @@ public class FirebaseActivity extends AppCompatActivity {
         }
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userName = rootRef.child("testlogin").child(user);
+        DatabaseReference userName = rootRef.child("users").child(user);
 
 
         // check username and create and store into firebase if not already exist
@@ -77,7 +77,7 @@ public class FirebaseActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()) {
                     //create new user
-                    rootRef.child("testlogin").child(user).setValue("");
+                    rootRef.child("users").child(user).setValue("");
 
                 }
             }
