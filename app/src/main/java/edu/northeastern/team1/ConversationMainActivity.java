@@ -22,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +29,6 @@ public class ConversationMainActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
     private List<Message> messageList = new ArrayList<>();
     public List<DataSnapshot> allMsgRef = new ArrayList<>();
-    private HashMap<String, String> imageHash = new HashMap<>();
     private MessageAdapter messageAdapter;
     private TextView chatName;
     public String chatId;
@@ -101,34 +99,34 @@ public class ConversationMainActivity extends AppCompatActivity {
     }
 
 
-    class imageThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-                DatabaseReference images = rootRef.child("images");
-
-                images.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            for (DataSnapshot image: snapshot.getChildren()) {
-                                String imageID = image.getKey();
-                                String imageUrl = image.getValue(String.class);
-                                imageHash.put(imageID, imageUrl);
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.v("Image Database Error", error.getMessage());
-                    }
-                });
-            } catch (DatabaseException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    class imageThread implements Runnable {
+//        @Override
+//        public void run() {
+//            try {
+//                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+//                DatabaseReference images = rootRef.child("images");
+//
+//                images.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (snapshot.exists()) {
+//                            for (DataSnapshot image: snapshot.getChildren()) {
+//                                String imageID = image.getKey();
+//                                String imageUrl = image.getValue(String.class);
+//                                imageHash.put(imageID, imageUrl);
+//                            }
+//                        }
+//                    }
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                        Log.v("Image Database Error", error.getMessage());
+//                    }
+//                });
+//            } catch (DatabaseException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -148,8 +146,8 @@ public class ConversationMainActivity extends AppCompatActivity {
         loadSavedInstance(savedInstanceState);
 
         // Getting images from firebase and store in the hashmap
-        imageThread imageThread = new imageThread();
-        new Thread(imageThread).start();
+//        imageThread imageThread = new imageThread();
+//        new Thread(imageThread).start();
 
         // Grabbing msgs from firebase using thread
         runnableThread runnableThread = new runnableThread();
@@ -225,7 +223,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         for (DataSnapshot message: allMsgRef) {
             long mid = Long.parseLong(Objects.requireNonNull(message.getKey()));
             String sender = message.child("sender").getValue(String.class);
-            String image = imageHash.get(message.child("image").getValue(String.class));
+            String image = (message.child("image").getValue(String.class));
             Message newMessage = new Message(mid, sender, image);
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());

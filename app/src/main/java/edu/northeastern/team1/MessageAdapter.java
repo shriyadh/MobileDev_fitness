@@ -1,6 +1,7 @@
 package edu.northeastern.team1;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -29,18 +35,29 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-
         Message currentMessage = messageList.get(position);
         holder.sentBy.setText(currentMessage.getSender());
-        Picasso.get()
-                .load(currentMessage.getImage())
-                .into(holder.image);
+        DatabaseReference image = FirebaseDatabase.getInstance()
+                .getReference("images").child(currentMessage.getImage());
+        image.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String imageUrl = snapshot.getValue(String.class);
+                Picasso.get()
+                        .load(imageUrl)
+                        .into(holder.image);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("Image Retrieval Error", error.getMessage());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return messageList.size();
     }
-
 
 }
