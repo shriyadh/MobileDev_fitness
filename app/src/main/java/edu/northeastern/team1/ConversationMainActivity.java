@@ -54,7 +54,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         curUser = i.getStringExtra("Logged_user");
 
 
-        init(savedInstanceState, curUser, chatId);
+        init(savedInstanceState);
 
         this.chatName = findViewById(R.id.textViewUsername);
 
@@ -144,7 +144,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    public void init(Bundle savedInstanceState, String loggedIn, String chatID) {
+    public void init(Bundle savedInstanceState) {
         loadSavedInstance(savedInstanceState);
 
         // Getting images from firebase and store in the hashmap
@@ -153,7 +153,7 @@ public class ConversationMainActivity extends AppCompatActivity {
 
         // Grabbing msgs from firebase using thread
         runnableThread runnableThread = new runnableThread();
-        runnableThread.setCid(Integer.parseInt(chatID));
+        runnableThread.setCid(Integer.parseInt(chatId));
         new Thread(runnableThread).start();
 
         setUpRecycler();
@@ -196,33 +196,25 @@ public class ConversationMainActivity extends AppCompatActivity {
         int clickId = view.getId();
         if (clickId == dogsButton.getId()) {
             long mid = new Date().getTime();
-            String sender = "ted";
-            String image = "dog";
-            Message newMessage = new Message(mid, sender, image);
+            Message newMessage = new Message(mid, curUser, "dogs");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             sendImage(newMessage);
         } else if (clickId == foodButton.getId()) {
             long mid = new Date().getTime();
-            String sender = "ted";
-            String image = "food";
-            Message newMessage = new Message(mid, sender, image);
+            Message newMessage = new Message(mid, curUser, "food");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             sendImage(newMessage);
         } else if (clickId == raceCarButton.getId()) {
             long mid = new Date().getTime();
-            String sender = "ted";
-            String image = "race_car";
-            Message newMessage = new Message(mid, sender, image);
+            Message newMessage = new Message(mid, curUser, "race_car");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             sendImage(newMessage);
         } else if (clickId == sunsetButton.getId()) {
             long mid = new Date().getTime();
-            String sender = "ted";
-            String image = "sunset";
-            Message newMessage = new Message(mid, sender, image);
+            Message newMessage = new Message(mid, curUser, "sunset");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             sendImage(newMessage);
