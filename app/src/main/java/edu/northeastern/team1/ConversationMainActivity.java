@@ -33,6 +33,7 @@ public class ConversationMainActivity extends AppCompatActivity {
     private TextView chatName;
     public String chatId;
     public String curUser;
+    public String chatUser;
 
     private Button dogsButton;
     private Button foodButton;
@@ -50,13 +51,14 @@ public class ConversationMainActivity extends AppCompatActivity {
         Intent i = getIntent();
         chatId = i.getStringExtra("chatID");
         curUser = i.getStringExtra("Logged_user");
+        chatUser = i.getStringExtra("Clicked user");
 
 
 
         init(savedInstanceState);
 
         this.chatName = findViewById(R.id.textViewUsername);
-        chatName.setText(curUser);
+        chatName.setText(chatUser);
 
         this.dogsButton = findViewById(R.id.dogsButton);
         this.foodButton = findViewById(R.id.foodButton);
