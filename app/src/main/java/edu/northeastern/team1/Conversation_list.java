@@ -260,8 +260,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
             public void onLinkClick(int position) {
                 // start message box activity
                 String chatID = listOfUsers.get(position).getConversation_id();
-                String clicked_user = listOfUsers.get(position).getConversation_id();
-                Intent startChat = new Intent(getWindow().getContext(), Test.class);
+                Intent startChat = new Intent(getWindow().getContext(), ConversationMainActivity.class);
                 startChat.putExtra("Logged_user", loggedInUser);
                 startChat.putExtra("Clicked user", clicked_user);
                 startChat.putExtra("chatID", chatID);
