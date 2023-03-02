@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,9 +53,11 @@ public class ConversationMainActivity extends AppCompatActivity {
         curUser = i.getStringExtra("Logged_user");
 
 
+
         init(savedInstanceState);
 
         this.chatName = findViewById(R.id.textViewUsername);
+        chatName.setText(curUser);
 
         this.dogsButton = findViewById(R.id.dogsButton);
         this.foodButton = findViewById(R.id.foodButton);
@@ -99,35 +102,6 @@ public class ConversationMainActivity extends AppCompatActivity {
     }
 
 
-//    class imageThread implements Runnable {
-//        @Override
-//        public void run() {
-//            try {
-//                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-//                DatabaseReference images = rootRef.child("images");
-//
-//                images.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if (snapshot.exists()) {
-//                            for (DataSnapshot image: snapshot.getChildren()) {
-//                                String imageID = image.getKey();
-//                                String imageUrl = image.getValue(String.class);
-//                                imageHash.put(imageID, imageUrl);
-//                            }
-//                        }
-//                    }
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//                        Log.v("Image Database Error", error.getMessage());
-//                    }
-//                });
-//            } catch (DatabaseException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         int length = messageList == null ? 0 : messageList.size();
@@ -145,11 +119,6 @@ public class ConversationMainActivity extends AppCompatActivity {
     public void init(Bundle savedInstanceState) {
         loadSavedInstance(savedInstanceState);
 
-        // Getting images from firebase and store in the hashmap
-//        imageThread imageThread = new imageThread();
-//        new Thread(imageThread).start();
-
-        // Grabbing msgs from firebase using thread
         runnableThread runnableThread = new runnableThread();
         runnableThread.setCid(Integer.parseInt(chatId));
         new Thread(runnableThread).start();
@@ -198,6 +167,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             sendImage(newMessage);
+            setUpRecycler();
         } else if (clickId == foodButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "food");
@@ -249,7 +219,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             DatabaseReference messageID = chatID.child(message.getMid().toString());
             messageID.child("image").setValue(message.getImage());
             messageID.child("sender").setValue(message.getSender());
-
         }
     }
 
