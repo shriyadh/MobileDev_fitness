@@ -37,7 +37,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
     private FloatingActionButton fBtn;
     private String findUser;
 
-    private boolean exists = false;
 
 
     @Override
@@ -115,25 +114,29 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     }
 
-    private void createFloatingImplement(){
+    private void createFloatingImplement() {
 
         fBtn = (FloatingActionButton) findViewById(R.id.floatingBtnAddLinks);
         fBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // creating the alert dialog box
-                NewChat input = new NewChat();
-                input.show(getSupportFragmentManager(), "New Chat");
-            }
-        }
+                                    @Override
+                                    public void onClick(View view) {
+                                        // creating the alert dialog box
+                                        NewChat input = new NewChat();
+                                        input.show(getSupportFragmentManager(), "New Chat");
 
-        )
-        ;
+                                    }
+                                }
 
+        );
+        System.out.println("Before crash");
+    }
+
+    public void startNewChat(){
         String chatUser = this.findUser;
-        Log.v("H",chatUser);
-        /*
-        DatabaseReference chatWith = this.databaseReference.child("testlogin").child(chatUser);
+        System.out.println("after crash" + chatUser);
+
+        DatabaseReference db1 = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference chatWith = db1.child("testlogin").child(chatUser);
 
         //if username same as login, then try again
         // check username to see if user exists
@@ -141,12 +144,66 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()) { // if the user doesnt exist
-                    Toast.makeText(getApplicationContext() , "Sorry! There is not user with that username. Please try messaging someone else", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    exists = true; // user does exists
-                    Log.v("here", "HERE1");
+                if (!dataSnapshot.exists()) {
+                    // if the user doesnt exist
+                    Toast.makeText(getApplicationContext(), "Sorry! There is not user with that username. Please try messaging someone else", Toast.LENGTH_SHORT).show();
+                } else {
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference inMember = db.child("members");
+                    ValueEventListener eventListener1 = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            String secondUser = "";
+
+                            if (snapshot.exists()) {
+                                boolean flag = true;
+                                for (DataSnapshot userData : snapshot.getChildren()) {
+
+                                    List<String> users = new ArrayList<>();
+
+                                    for (DataSnapshot curr : userData.getChildren()) {
+                                        String a = curr.getKey();
+                                        users.add(a);
+                                    }
+
+                                    if (users.contains(loggedInUser)) {
+                                        String firstUser = userData.getKey();
+
+
+                                        for (String name : users) {
+                                            if (!name.equals(loggedInUser)) {
+                                                secondUser = name;
+                                            }
+                                        }
+
+                                        if (secondUser.equals(findUser)) {
+                                            Toast.makeText(getApplicationContext(), "You already have a chat with this user!", Toast.LENGTH_LONG).show();
+                                            flag = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(flag) {
+
+                                    // start new chat
+
+                                    Conversations newChat = new Conversations(findUser, "0");
+                                    listOfUsers.add(newChat);
+                                    adapter.notifyItemInserted(listOfUsers.size());
+
+
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    };
+                    inMember.addValueEventListener(eventListener1);
                 }
             }
 
@@ -154,54 +211,12 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("tag", databaseError.getMessage()); //Don't ignore errors!
             }
+
         };
         chatWith.addListenerForSingleValueEvent(eventListener);
 
-        DatabaseReference chats = this.databaseReference.child("members");
-        Log.v("here", "HERE2");
-        ValueEventListener eventListener1 = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                String secondUser = "";
-
-                if(snapshot.exists()) {
-                    for(DataSnapshot userData : snapshot.getChildren()) {
-
-                        List<String> users = new ArrayList<>();
-
-                        for(DataSnapshot curr : userData.getChildren()) {
-                            String a = curr.getKey();
-                            users.add(a);
-                        }
-
-                        if(users.contains(loggedInUser)) {
-                            String firstUser = userData.getKey();
-
-
-                            for(String name : users){
-                                if(!name.equals(loggedInUser)){
-                                    secondUser = name;
-                                }
-                            }
-
-                            if(secondUser.equals(findUser)) {
-                                Toast.makeText(getApplicationContext(), "You already have a chat with this user!", Toast.LENGTH_LONG);
-                            }
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-                };
-        if(exists) {
-            chats.addListenerForSingleValueEvent(eventListener1);
-            Log.v("HERE","Here!!!");
-        }
+    }
 
 
 
@@ -218,12 +233,12 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
          */
 
-    }
 
 
 
 
-            public void init(Bundle savedInstanceState) {
+
+    public void init(Bundle savedInstanceState) {
         //loadSavedInstance(savedInstanceState);
         setUpRecycler();
     }
@@ -266,6 +281,8 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     @Override
     public void applyTexts(String user) {
+
         this.findUser = user;
+        startNewChat();
     }
 }

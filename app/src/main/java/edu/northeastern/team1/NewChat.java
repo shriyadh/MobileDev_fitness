@@ -71,7 +71,7 @@ public class NewChat  extends AppCompatDialogFragment {
         });
 
         userName = view.findViewById(R.id.editTextTextPersonName);
-
+        System.out.println(userName);
         return inputBox.create();
     }
 
