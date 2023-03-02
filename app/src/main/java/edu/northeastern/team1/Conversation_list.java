@@ -73,20 +73,27 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
                 if(snapshot.exists()) {
                     for(DataSnapshot userData : snapshot.getChildren()) {
-
+                        System.out.println(userData);
                         List<String> users = new ArrayList<>();
 
                         for(DataSnapshot curr : userData.getChildren()) {
                             String a = curr.getKey();
                             users.add(a);
                         }
+                        //System.out.println(users+loggedInUser);
+
+                        System.out.println(users.contains(loggedInUser));
+
 
                         if(users.contains(loggedInUser)) {
+                            System.out.println("YES");
+
                             String id = userData.getKey();
                             String add_user="";
                             for(String name : users){
                                 if(!name.equals(loggedInUser)){
                                     add_user = name;
+                                    System.out.println(add_user);
                                 }
                             }
 
@@ -102,7 +109,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 }
 
                 adapter.notifyItemRangeInserted(0, listOfUsers.size());
-                conversationRecycler.scrollToPosition(listOfUsers.size());
+                conversationRecycler.scrollToPosition(listOfUsers.size()-1);
             }
 
             @Override
@@ -208,7 +215,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                                             Conversations newChat = new Conversations(findUser, newID_str);
                                             listOfUsers.add(newChat);
                                             adapter.notifyItemInserted(listOfUsers.size());
-                                            conversationRecycler.scrollToPosition(listOfUsers.size());
+                                            conversationRecycler.scrollToPosition(listOfUsers.size()-1);
                                             String lastAdded = listOfUsers.get(listOfUsers.size() -1).getConversation_id();
                                             Long addThis = Long.parseLong(lastAdded);
 
@@ -308,6 +315,8 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
     public void applyTexts(String user) {
 
         this.findUser = user;
+        findUser = findUser.strip();
+        findUser = findUser.toLowerCase(Locale.ROOT);
         startNewChat();
     }
 }
