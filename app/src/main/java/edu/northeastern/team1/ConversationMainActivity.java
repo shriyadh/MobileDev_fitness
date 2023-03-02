@@ -167,6 +167,8 @@ public class ConversationMainActivity extends AppCompatActivity {
             Message newMessage = new Message(mid, curUser, "dogs");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+
             sendImage(newMessage);
             setUpRecycler();
         } else if (clickId == foodButton.getId()) {
@@ -174,18 +176,24 @@ public class ConversationMainActivity extends AppCompatActivity {
             Message newMessage = new Message(mid, curUser, "food");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+
             sendImage(newMessage);
         } else if (clickId == raceCarButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "race_car");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+
             sendImage(newMessage);
         } else if (clickId == sunsetButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "sunset");
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+
             sendImage(newMessage);
         }
     }
@@ -198,6 +206,8 @@ public class ConversationMainActivity extends AppCompatActivity {
             Message newMessage = new Message(mid, sender, image);
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+
         }
     }
 
