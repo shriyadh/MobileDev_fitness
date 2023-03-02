@@ -170,7 +170,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
             sendImage(newMessage);
-            setUpRecycler();
         } else if (clickId == foodButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "food");
