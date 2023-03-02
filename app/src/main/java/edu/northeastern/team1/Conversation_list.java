@@ -36,7 +36,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
     private TextView convTitle;
     private FloatingActionButton fBtn;
     private String findUser;
-    private String add_user = "";
 
     private boolean exists = false;
 
@@ -82,12 +81,13 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
                         if(users.contains(loggedInUser)) {
                             String id = userData.getKey();
-
+                            String add_user="";
                             for(String name : users){
                                 if(!name.equals(loggedInUser)){
                                     add_user = name;
                                 }
                             }
+
                             Conversations conversation = new Conversations(add_user,id);
                             listOfUsers.add(conversation);
                         }
@@ -194,9 +194,10 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
             public void onLinkClick(int position) {
                 // start message box activity
                 String chatID = listOfUsers.get(position).getConversation_id();
+                String clicked_user = listOfUsers.get(position).getConversation_id();
                 Intent startChat = new Intent(getWindow().getContext(), Test.class);
                 startChat.putExtra("Logged_user", loggedInUser);
-                startChat.putExtra("Clicked user", add_user);
+                startChat.putExtra("Clicked user", clicked_user);
                 startChat.putExtra("chatID", chatID);
                 startActivity(startChat);
 
