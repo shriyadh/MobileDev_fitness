@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -203,11 +204,21 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                                             Long lastID = snapshot.getValue(Long.class);
                                             Long newID = lastID + 1;
                                             String newID_str = newID.toString();
-                                            //getlastID.setValue(newID);
 
                                             Conversations newChat = new Conversations(findUser, newID_str);
                                             listOfUsers.add(newChat);
                                             adapter.notifyItemInserted(listOfUsers.size());
+                                            String lastAdded = listOfUsers.get(listOfUsers.size() -1).getConversation_id();
+                                            Long addThis = Long.parseLong(lastAdded);
+
+
+                                            // update db here
+                                            db.child("total_chatID").setValue(addThis);
+
+                                            db.child("chats").child(lastAdded).child("created").setValue(new Date().getTime());
+                                            db.child("members").child(lastAdded).child(loggedInUser).setValue("");
+                                            db.child("members").child(lastAdded).child(findUser).setValue("");
+                                            System.out.println("HEREEE");
 
                                         }
 
@@ -216,14 +227,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
                                         }
                                     };
-                                    getlastID.addValueEventListener(eventListener3);
-                                    String lastAdded = listOfUsers.get(listOfUsers.size() -1).getConversation_id();
-                                    System.out.println(lastAdded);
-                                    Long addThis = Long.parseLong(lastAdded);
-
-                                    System.out.println("HEREEE");
-                                    db.child("total_chatID").setValue(addThis);
-                                    System.out.println("HEREEE");
+                                    getlastID.addListenerForSingleValueEvent(eventListener3);
 
 
 
@@ -238,7 +242,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
                         }
                     };
-                    inMember.addValueEventListener(eventListener1);
+                    inMember.addListenerForSingleValueEvent(eventListener1);
                 }
             }
 
@@ -291,6 +295,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         conversationRecycler.addItemDecoration(decor);
 
     }
+
 
     public void startHistoryIntent(View view){
         Intent history = new Intent(this, StickerLedgerActivity.class);
