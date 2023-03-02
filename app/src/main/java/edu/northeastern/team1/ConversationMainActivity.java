@@ -33,6 +33,8 @@ public class ConversationMainActivity extends AppCompatActivity {
     private HashMap<String, String> imageHash = new HashMap<>();
     private MessageAdapter messageAdapter;
     private TextView chatName;
+    public String chatId;
+    public String curUser;
 
     private Button dogsButton;
     private Button foodButton;
@@ -48,17 +50,8 @@ public class ConversationMainActivity extends AppCompatActivity {
 
         // grab chat_id and logged in user from previous activity
         Intent i = getIntent();
-        String chatId = i.getStringExtra("chatID");
-        String curUser = i.getStringExtra("Logged_user");
-
-//        // Getting images from firebase and store in the hashmap
-//        imageThread imageThread = new imageThread();
-//        new Thread(imageThread).start();
-//
-//        // Grabbing msgs from firebase using thread
-//        runnableThread runnableThread = new runnableThread();
-//        runnableThread.setCid(Integer.parseInt(chatId));
-//        new Thread(runnableThread).start();
+        chatId = i.getStringExtra("chatID");
+        curUser = i.getStringExtra("Logged_user");
 
 
         init(savedInstanceState, curUser, chatId);
@@ -253,7 +246,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         new Thread(sendThread).start();
     }
 
-    static class sendThread implements Runnable {
+    class sendThread implements Runnable {
         private Message message;
         public void setMessage(Message message) {
             this.message = message;
@@ -261,7 +254,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         @Override
         public void run() {
             DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference chatID = rootRef.child("messages").child("3");
+            DatabaseReference chatID = rootRef.child("messages").child(chatId);
             chatID.child(message.getMid().toString());
             DatabaseReference messageID = chatID.child(message.getMid().toString());
             messageID.child("image").setValue(message.getImage());
