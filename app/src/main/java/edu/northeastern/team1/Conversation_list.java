@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Conversation_list extends AppCompatActivity {
+public class Conversation_list extends AppCompatActivity implements NewChat.DgListener{
 
     private RecyclerView conversationRecycler;
     private List<Conversations> listOfUsers = new ArrayList<>();
@@ -33,6 +33,8 @@ public class Conversation_list extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private TextView convTitle;
     private FloatingActionButton fBtn;
+    private String findUser;
+    private String add_user = "";
 
 
     @Override
@@ -76,7 +78,7 @@ public class Conversation_list extends AppCompatActivity {
 
                         if(users.contains(loggedInUser)) {
                             String id = userData.getKey();
-                            String add_user = "";
+
                             for(String name : users){
                                 if(!name.equals(loggedInUser)){
                                     add_user = name;
@@ -144,7 +146,7 @@ public class Conversation_list extends AppCompatActivity {
                 String chatID = listOfUsers.get(position).getConversation_id();
                 Intent startChat = new Intent(getWindow().getContext(), Test.class);
                 startChat.putExtra("Logged_user", loggedInUser);
-
+                startChat.putExtra("Clicked user", add_user);
                 startChat.putExtra("chatID", chatID);
                 startActivity(startChat);
 
@@ -160,10 +162,8 @@ public class Conversation_list extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
+    @Override
+    public void applyTexts(String user) {
+        this.findUser = user;
+    }
 }
