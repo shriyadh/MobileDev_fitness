@@ -17,6 +17,12 @@
     <string name="stick_it">Stick It</string>
     <string name="team_1_ONE">TEAM 1</string>
     <string name="team_members_ngino_romanello_nmariah_maynard_nmitchell_neides_nshriya_dhaundiyal_ntae_hyeon_lee">Gino Romanello\n\nMariah Maynard\n\nMitchell Neides\n\nShriya Dhaundiyal\n\nTae Hyeon Lee</string>
+    <string name="dogs">Dogs</string>
+    <string name="food">Food</string>
+    <string name="race_car">Race Car</string>
+    <string name="sunset">Sunset</string>
+    <string name="user_sent">User Sent</string>
+    <string name="image_sent">Image Sent</string>
     <string name="sticker_ledger">Sticker Ledger</string>
     <string name="sent_count_0">Sent Count: 0</string>
     <string name="conversations">Conversations</string>

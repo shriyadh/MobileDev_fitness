@@ -38,6 +38,9 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ConversationMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".AboutTeam"
             android:exported="false">
             <meta-data
