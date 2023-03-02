@@ -130,7 +130,9 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         )
         ;
 
-        String chatUser = "mariah";
+        String chatUser = this.findUser;
+        Log.v("H",chatUser);
+        /*
         DatabaseReference chatWith = this.databaseReference.child("testlogin").child(chatUser);
 
         //if username same as login, then try again
@@ -144,6 +146,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 }
                 else {
                     exists = true; // user does exists
+                    Log.v("here", "HERE1");
                 }
             }
 
@@ -152,9 +155,56 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 Log.d("tag", databaseError.getMessage()); //Don't ignore errors!
             }
         };
+        chatWith.addListenerForSingleValueEvent(eventListener);
+
+        DatabaseReference chats = this.databaseReference.child("members");
+        Log.v("here", "HERE2");
+        ValueEventListener eventListener1 = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                String secondUser = "";
+
+                if(snapshot.exists()) {
+                    for(DataSnapshot userData : snapshot.getChildren()) {
+
+                        List<String> users = new ArrayList<>();
+
+                        for(DataSnapshot curr : userData.getChildren()) {
+                            String a = curr.getKey();
+                            users.add(a);
+                        }
+
+                        if(users.contains(loggedInUser)) {
+                            String firstUser = userData.getKey();
 
 
-        chatWith.addListenerForSingleValueEvent(eventListener); 
+                            for(String name : users){
+                                if(!name.equals(loggedInUser)){
+                                    secondUser = name;
+                                }
+                            }
+
+                            if(secondUser.equals(findUser)) {
+                                Toast.makeText(getApplicationContext(), "You already have a chat with this user!", Toast.LENGTH_LONG);
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+                };
+        if(exists) {
+            chats.addListenerForSingleValueEvent(eventListener1);
+            Log.v("HERE","Here!!!");
+        }
+
+
+
 
 
         // allow user to chat if the person exists
@@ -172,7 +222,8 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
 
 
-    public void init(Bundle savedInstanceState) {
+
+            public void init(Bundle savedInstanceState) {
         //loadSavedInstance(savedInstanceState);
         setUpRecycler();
     }
