@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -19,6 +20,7 @@ import com.google.firebase.database.Logger;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,6 +61,25 @@ public class FirebaseActivity extends AppCompatActivity {
         return user;
     }
 
+    public void setStickerLedger(String username) {
+        DatabaseReference sticker_count = FirebaseDatabase.getInstance()
+                                                          .getReference().child("sticker_count");
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                sticker_count.child(username).child("dogs").setValue(0);
+                sticker_count.child(username).child("food").setValue(0);
+                sticker_count.child(username).child("race_car").setValue(0);
+                sticker_count.child(username).child("sunset").setValue(0);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        sticker_count.addListenerForSingleValueEvent(eventListener);
+    }
+
     public void logIn(View view) {
         this.user = String.valueOf(curUser.getText()).toLowerCase();
         this.user = user.strip(); //current username
@@ -92,7 +113,9 @@ public class FirebaseActivity extends AppCompatActivity {
         userName.addListenerForSingleValueEvent(eventListener);
 
 
+        setStickerLedger(user);
         // allow user to log in
+
          Intent intent = new Intent(this , Conversation_list.class);
          intent.putExtra("Current_user", user);
          startActivity(intent);
