@@ -162,6 +162,7 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         int clickId = view.getId();
+
         if (clickId == dogsButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "dogs");
@@ -170,6 +171,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
             sendImage(newMessage);
+            getOldCount("dogs");
         } else if (clickId == foodButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "food");
@@ -178,6 +180,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
             sendImage(newMessage);
+            getOldCount("food");
         } else if (clickId == raceCarButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "race_car");
@@ -186,6 +189,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
             sendImage(newMessage);
+            getOldCount("race_car");
         } else if (clickId == sunsetButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "sunset");
@@ -194,7 +198,31 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
             sendImage(newMessage);
+            getOldCount("sunset");
         }
+    }
+
+    public void getOldCount(String sticker) {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference user_sticker_count = rootRef.child("sticker_count").child(curUser);
+        DatabaseReference sticker_count = user_sticker_count.child(sticker);
+        ValueEventListener eL = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // grab old value
+                Long val = snapshot.getValue(Long.class);
+                // increment
+                Long newVal = val + 1;
+                // update db
+                sticker_count.setValue(newVal);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        sticker_count.addListenerForSingleValueEvent(eL);
     }
 
     public void createMessageList() {
