@@ -10,8 +10,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +37,8 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
     private FloatingActionButton fBtn;
     private String findUser;
     private String add_user = "";
+
+    private boolean exists = false;
 
 
     @Override
@@ -112,6 +116,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
     }
 
     private void createFloatingImplement(){
+
         fBtn = (FloatingActionButton) findViewById(R.id.floatingBtnAddLinks);
         fBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,9 +125,53 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 NewChat input = new NewChat();
                 input.show(getSupportFragmentManager(), "New Chat");
             }
-        });
+        }
+
+        )
+        ;
+
+        String chatUser = "mariah";
+        DatabaseReference chatWith = this.databaseReference.child("testlogin").child(chatUser);
+
+        //if username same as login, then try again
+        // check username to see if user exists
+
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()) { // if the user doesnt exist
+                    Toast.makeText(getApplicationContext() , "Sorry! There is not user with that username. Please try messaging someone else", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    exists = true; // user does exists
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("tag", databaseError.getMessage()); //Don't ignore errors!
+            }
+        };
+
+
+        chatWith.addListenerForSingleValueEvent(eventListener); 
+
+
+        // allow user to chat if the person exists
+        /*
+        if(exists) {
+            Intent intent = new Intent(this, Conversation_list.class);
+            intent.putExtra("Current_user", loggedInUser);
+            intent.putExtra("Chat_buddy", )
+            startActivity(intent);
+        }
+
+         */
 
     }
+
+
+
     public void init(Bundle savedInstanceState) {
         //loadSavedInstance(savedInstanceState);
         setUpRecycler();
@@ -134,6 +183,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
         // set layout
         conversationRecycler.setLayoutManager(new LinearLayoutManager(this));
+
         //set adapter
         adapter = new ConvoAdapter(listOfUsers, this);
         conversationRecycler.setAdapter(adapter);
