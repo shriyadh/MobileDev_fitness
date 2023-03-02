@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,13 +37,18 @@ public class ConversationMainActivity extends AppCompatActivity {
     public String curUser;
     public String chatUser;
 
-    private Button dogsButton;
-    private Button foodButton;
-    private Button raceCarButton;
-    private Button sunsetButton;
+    private ImageView dogsButton;
+    private ImageView foodButton;
+    private ImageView raceCarButton;
+    private ImageView sunsetButton;
 
     private static final String SIZE_OF_MESSAGES = "SIZE_OF_MESSAGES";
     private static final String MESSAGE_INSTANCE_KEY = "MESSAGE_INSTANCE_KEY";
+
+    private static final String DOGS_URL = "https://images.unsplash.com/photo-1444212477490-ca407925329e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8ZG9nc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60";
+    private static final String FOOD_URL = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9vZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60";
+    private static final String RACE_CAR_URL = "https://images.unsplash.com/photo-1630446838167-4f63bc82e1cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cmFjZSUyMGNhciUyMGYxfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
+    private static final String SUNSET_URL = "https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c3Vuc2V0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,17 +60,27 @@ public class ConversationMainActivity extends AppCompatActivity {
         curUser = i.getStringExtra("Logged_user");
         chatUser = i.getStringExtra("Clicked user");
 
-
-
         init(savedInstanceState);
 
         this.chatName = findViewById(R.id.textViewUsername);
         chatName.setText(chatUser);
 
         this.dogsButton = findViewById(R.id.dogsButton);
+        Picasso.get()
+                .load(DOGS_URL)
+                .into(dogsButton);
         this.foodButton = findViewById(R.id.foodButton);
+        Picasso.get()
+                .load(FOOD_URL)
+                .into(foodButton);
         this.raceCarButton = findViewById(R.id.racecarButton);
+        Picasso.get()
+                .load(RACE_CAR_URL)
+                .into(raceCarButton);
         this.sunsetButton = findViewById(R.id.sunsetButton);
+        Picasso.get()
+                .load(SUNSET_URL)
+                .into(sunsetButton);
     }
 
 
