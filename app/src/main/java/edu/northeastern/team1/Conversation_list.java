@@ -102,7 +102,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 }
 
                 adapter.notifyItemRangeInserted(0, listOfUsers.size());
-
+                conversationRecycler.scrollToPosition(listOfUsers.size());
             }
 
             @Override
@@ -208,6 +208,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                                             Conversations newChat = new Conversations(findUser, newID_str);
                                             listOfUsers.add(newChat);
                                             adapter.notifyItemInserted(listOfUsers.size());
+                                            conversationRecycler.scrollToPosition(listOfUsers.size());
                                             String lastAdded = listOfUsers.get(listOfUsers.size() -1).getConversation_id();
                                             Long addThis = Long.parseLong(lastAdded);
 
