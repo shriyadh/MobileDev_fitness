@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.security.auth.callback.Callback;
+
 public class Conversation_list extends AppCompatActivity implements NewChat.DgListener{
 
     private RecyclerView conversationRecycler;
@@ -133,7 +135,9 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     public void startNewChat(){
         String chatUser = this.findUser;
-        System.out.println("after crash" + chatUser);
+        chatUser = chatUser.toLowerCase(Locale.ROOT);
+        chatUser = chatUser.strip();
+
 
         DatabaseReference db1 = FirebaseDatabase.getInstance().getReference();
         DatabaseReference chatWith = db1.child("testlogin").child(chatUser);
@@ -185,12 +189,43 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                                     }
                                 }
                                 if(flag) {
+                                    // create unique chat ID
+                                    DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                                    DatabaseReference getlastID = db.child("total_chatID");
+                                    System.out.println(getlastID);
+                                    String lastIDKey = getlastID.getKey();
 
-                                    // start new chat
 
-                                    Conversations newChat = new Conversations(findUser, "0");
-                                    listOfUsers.add(newChat);
-                                    adapter.notifyItemInserted(listOfUsers.size());
+                                    ValueEventListener eventListener3 = new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            String key = snapshot.getKey();
+                                            Long lastID = snapshot.getValue(Long.class);
+                                            Long newID = lastID + 1;
+                                            String newID_str = newID.toString();
+                                            //getlastID.setValue(newID);
+
+                                            Conversations newChat = new Conversations(findUser, newID_str);
+                                            listOfUsers.add(newChat);
+                                            adapter.notifyItemInserted(listOfUsers.size());
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    };
+                                    getlastID.addValueEventListener(eventListener3);
+                                    String lastAdded = listOfUsers.get(listOfUsers.size() -1).getConversation_id();
+                                    System.out.println(lastAdded);
+                                    Long addThis = Long.parseLong(lastAdded);
+
+                                    System.out.println("HEREEE");
+                                    db.child("total_chatID").setValue(addThis);
+                                    System.out.println("HEREEE");
+
+
 
 
                                 }

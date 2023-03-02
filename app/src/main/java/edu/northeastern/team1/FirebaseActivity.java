@@ -60,7 +60,8 @@ public class FirebaseActivity extends AppCompatActivity {
     }
 
     public void logIn(View view) {
-        this.user = String.valueOf(curUser.getText()).toLowerCase(); //current username
+        this.user = String.valueOf(curUser.getText()).toLowerCase();
+        this.user = user.strip(); //current username
         String verifiedName = createUser(user);
         if (verifiedName==null){
             return;
