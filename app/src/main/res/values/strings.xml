@@ -29,5 +29,8 @@
     <string name="username">username</string>
     <string name="new_chat">New_chat</string>
     <string name="enter_user_you_wish_to_chat_with">Enter User You Wish To Chat With</string>
+    <string name="enter_user_you_wish_to_chat_with1">Enter User You Wish To Chat With</string>
+    <string name="enter_user_name_to_start_chat">Enter user to start chat</string>
+    <string name="check_sticker_history">Check Sticker History</string>
 
 </resources>

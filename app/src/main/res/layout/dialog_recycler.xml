@@ -10,12 +10,14 @@
         android:id="@+id/editTextTextPersonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints="Enter User You Wish To Chat With"
         android:ems="10"
+        android:hint="@string/enter_user_name_to_start_chat"
         android:inputType="textPersonName"
-        android:text="@string/enter_user_you_wish_to_chat_with"
+        android:minHeight="48dp"
+        android:textColorHint="#757575"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="Enter User You Wish To Chat With" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

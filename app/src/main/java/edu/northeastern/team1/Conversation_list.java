@@ -116,7 +116,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     private void createFloatingImplement() {
 
-        fBtn = (FloatingActionButton) findViewById(R.id.floatingBtnAddLinks);
+        fBtn = (FloatingActionButton) findViewById(R.id.floatingBtnStartChat);
         fBtn.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -218,28 +218,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     }
 
-
-
-
-
-        // allow user to chat if the person exists
-        /*
-        if(exists) {
-            Intent intent = new Intent(this, Conversation_list.class);
-            intent.putExtra("Current_user", loggedInUser);
-            intent.putExtra("Chat_buddy", )
-            startActivity(intent);
-        }
-
-         */
-
-
-
-
-
-
     public void init(Bundle savedInstanceState) {
-        //loadSavedInstance(savedInstanceState);
         setUpRecycler();
     }
 
@@ -260,6 +239,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
             public void onLinkClick(int position) {
                 // start message box activity
                 String chatID = listOfUsers.get(position).getConversation_id();
+                String clicked_user = listOfUsers.get(position).getUser();
                 Intent startChat = new Intent(getWindow().getContext(), ConversationMainActivity.class);
                 startChat.putExtra("Logged_user", loggedInUser);
                 startChat.putExtra("Clicked user", clicked_user);
@@ -277,6 +257,11 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     }
 
+    public void startHistoryIntent(View view){
+        Intent history = new Intent(this, StickerLedgerActivity.class);
+        history.putExtra("Current_user", loggedInUser);
+        startActivity(history);
+    }
 
     @Override
     public void applyTexts(String user) {
