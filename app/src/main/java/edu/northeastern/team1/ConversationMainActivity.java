@@ -423,7 +423,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             jPayload.put("priority", "high");
             jPayload.put("notification", jNotification);
             jPayload.put("data", jdata);
-            //System.out.println("HEREEEEEE22222");
 
         }
         catch (JSONException e) {
@@ -432,7 +431,8 @@ public class ConversationMainActivity extends AppCompatActivity {
 
 
         final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
-        //Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+
+        Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
 
     }
 
