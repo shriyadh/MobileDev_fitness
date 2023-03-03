@@ -222,7 +222,6 @@ public class ConversationMainActivity extends AppCompatActivity {
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         // Set Adapter
-//        messageAdapter = new MessageAdapter(new ArrayList<>(messageHashMap.values()), this);
         messageAdapter = new MessageAdapter(messageList, this);
         messageRecycler.setAdapter(messageAdapter);
 
@@ -242,8 +241,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
-//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("dogs");
@@ -254,8 +251,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
-//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("food");
@@ -266,8 +261,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
-//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("race_car");
@@ -278,8 +271,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
-//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("sunset");
@@ -315,9 +306,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             String sender = message.child("sender").getValue(String.class);
             String image = (message.child("image").getValue(String.class));
             Message newMessage = new Message(mid, sender, image);
-//            messageHashMap.put(mid, newMessage);
-//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
@@ -368,23 +356,15 @@ public class ConversationMainActivity extends AppCompatActivity {
                                 Message newMessage = new Message(mid, sender, image);
                                 messageHashMap.put(mid, newMessage);
                                 messageList.add(newMessage);
-//                                messageAdapter.notifyItemInserted(messageHashMap.size());
                                 messageAdapter.notifyItemInserted(messageList.size());
-//                                messageRecycler.scrollToPosition(messageHashMap.size() - 1);
                                 messageRecycler.scrollToPosition(messageList.size() - 1);
                             }
                         }
                     }
-
-
-//                    Message newMessage = new Message();
-//
-//                    messageAdapter.notifyItemInserted();
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }).start();
