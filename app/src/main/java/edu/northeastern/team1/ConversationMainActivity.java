@@ -78,7 +78,6 @@ public class ConversationMainActivity extends AppCompatActivity {
         chatName.setText(chatUser);
 
         messageListener();
-
     }
 
     public void getFirebaseImages(){
@@ -309,7 +308,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
-
         }
     }
 
@@ -336,7 +334,6 @@ public class ConversationMainActivity extends AppCompatActivity {
     }
 
     private void messageListener() {
-        System.out.println(messageHashMap.values());
         new Thread(() -> {
             DatabaseReference chat = FirebaseDatabase.getInstance()
                     .getReference("/messages/" + chatId);
