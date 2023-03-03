@@ -346,9 +346,8 @@ public class ConversationMainActivity extends AppCompatActivity {
                                 snapshot.getChildren()) {
                             long mid = Long.parseLong(Objects.requireNonNull(msg.getKey()));
                             if (!messageHashMap.containsKey(mid)) {
-                                String sender = msg.child("sender").getValue(String.class);
                                 String image = msg.child("image").getValue(String.class);
-                                Message newMessage = new Message(mid, sender, image);
+                                Message newMessage = new Message(mid, chatUser, image);
                                 messageHashMap.put(mid, newMessage);
                                 messageList.add(newMessage);
                                 messageAdapter.notifyItemInserted(messageList.size());
