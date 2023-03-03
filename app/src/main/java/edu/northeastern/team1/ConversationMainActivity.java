@@ -50,6 +50,10 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     private static final String SIZE_OF_MESSAGES = "SIZE_OF_MESSAGES";
     private static final String MESSAGE_INSTANCE_KEY = "MESSAGE_INSTANCE_KEY";
+    private static String CLIENT_REGISTRATION_TOKEN = null;
+    private static String RECEIVER_REGISTRATION_TOKEN;
+    private HashMap<String, String> notifications = new HashMap<>();
+
 
     private static final String DOGS = "dogs";
     private static final String FOOD = "food";
@@ -78,12 +82,38 @@ public class ConversationMainActivity extends AppCompatActivity {
         chatId = i.getStringExtra("chatID");
         curUser = i.getStringExtra("Logged_user");
         chatUser = i.getStringExtra("Clicked user");
+        CLIENT_REGISTRATION_TOKEN = i.getStringExtra("sender");
+        getReceiverToken();
 
         init(savedInstanceState);
 
         this.chatName = findViewById(R.id.textViewUsername);
         chatName.setText(chatUser);
 
+    }
+
+    public void getReceiverToken(){
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference rec = db.child("token");
+
+        ValueEventListener ev = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot curr : snapshot.getChildren()) {
+
+                    String token =curr.getKey();
+                    String user = curr.getValue(String.class);
+                    notifications.put(token,user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        rec.addListenerForSingleValueEvent(ev);
     }
 
     public void getFirebaseImages(){
@@ -171,7 +201,6 @@ public class ConversationMainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        System.out.println("error");
                         Log.d("tag", error.getMessage());
                     }
                 };
@@ -319,6 +348,12 @@ public class ConversationMainActivity extends AppCompatActivity {
     }
 
     private void sendImage(Message message) {
+        for(String k : notifications.keySet()){
+            if(notifications.get(k).equals(chatUser)){
+                RECEIVER_REGISTRATION_TOKEN = k;
+            }
+        }
+
         sendThread sendThread = new sendThread();
         sendThread.setMessage(message);
         new Thread(sendThread).start();
@@ -348,13 +383,16 @@ public class ConversationMainActivity extends AppCompatActivity {
      * @param
      */
     public void sendMessageToDevice() {
-        new Thread(new Runnable() {
+        if(RECEIVER_REGISTRATION_TOKEN != null ){
+
+            new Thread(new Runnable() {
             @Override
             public void run() {
-                sendMessageToDevice("dLsdiKG0TIufdUyq2bPp1X:APA91bGFah0pN5Jsml11wc24fi27kXQOm_7R0njljLmIsiqSZQQs6DwsgjHuiXLl9o_7oxiIi1wpXRsgpKKtOqDdtosdMI9SacGZhDNdrNL_NILKtHrRhPz1bPhlMLWtodbDiCzkZv1t");
+                sendMessageToDevice(RECEIVER_REGISTRATION_TOKEN);
+
             }
         }).start();
-    }
+    }}
 
 
     /**
