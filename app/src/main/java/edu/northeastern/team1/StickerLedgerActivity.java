@@ -44,7 +44,7 @@ public class StickerLedgerActivity extends AppCompatActivity {
         setUpRecycler(savedInstanceState);
 
         findImages();
-        getFirebaseUseCounts();
+        finduseCounts();
     }
 
     public void getFirebaseImages(){
@@ -117,6 +117,22 @@ public class StickerLedgerActivity extends AppCompatActivity {
 
         };
         sticker_count.addListenerForSingleValueEvent(eventListener);
+    }
+
+    class useCountsThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                getFirebaseUseCounts();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void finduseCounts() {
+        useCountsThread useCountsThread = new useCountsThread();
+        new Thread(useCountsThread).start();
     }
 
     private void setUpRecycler(Bundle savedInstanceState) {
