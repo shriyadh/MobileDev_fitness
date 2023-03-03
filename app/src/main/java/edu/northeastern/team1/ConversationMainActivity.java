@@ -22,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +55,9 @@ public class ConversationMainActivity extends AppCompatActivity {
     private static final String FOOD = "food";
     private static final String RACE_CAR = "race_car";
     private static final String SUNSET = "sunset";
+
+    private static String SERVER_KEY = "key=AAAAA-o_j1w:APA91bG-EIZHa2SWLK_sJawMhwOTWVlGqSSY0OfRUsHEItLB1qmCrEYgpjMXM-vyGbSVUXKbx-C_86-pwtTl9j3ZnD6DZ4BIxCKdohuYriz4dWfMimDH1c_w7ROc_JJgYNzpufkRRSJM";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -331,7 +337,65 @@ public class ConversationMainActivity extends AppCompatActivity {
             DatabaseReference messageID = chatID.child(message.getMid().toString());
             messageID.child("image").setValue(message.getImage());
             messageID.child("sender").setValue(message.getSender());
+            sendMessageToDevice();
         }
+    }
+
+
+    /**
+     * Button Handler; creates a new thread that sends off a message to the target(this) device
+     *
+     * @param
+     */
+    public void sendMessageToDevice() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendMessageToDevice("dLsdiKG0TIufdUyq2bPp1X:APA91bGFah0pN5Jsml11wc24fi27kXQOm_7R0njljLmIsiqSZQQs6DwsgjHuiXLl9o_7oxiIi1wpXRsgpKKtOqDdtosdMI9SacGZhDNdrNL_NILKtHrRhPz1bPhlMLWtodbDiCzkZv1t");
+            }
+        }).start();
+    }
+
+
+    /**
+     * Pushes a notification to a given device-- in particular, this device,
+     * because that's what the instanceID token is defined to be.
+     */
+    private void sendMessageToDevice(String targetToken) {
+
+        // Prepare data
+        JSONObject jPayload = new JSONObject();
+        JSONObject jNotification = new JSONObject();
+        JSONObject jdata = new JSONObject();
+        try {
+            jNotification.put("body", "You have received a new message from " + curUser + "!");
+            jNotification.put("sound", "default");
+            jNotification.put("badge", "1");
+
+
+
+            /***
+             * The Notification object is now populated.
+             * Next, build the Payload that we send to the server.
+             */
+
+            // If sending to a single client
+            jPayload.put("to", targetToken); // CLIENT_REGISTRATION_TOKEN);
+
+            jPayload.put("priority", "high");
+            jPayload.put("notification", jNotification);
+            jPayload.put("data", jdata);
+            //System.out.println("HEREEEEEE22222");
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
+        //Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+
     }
 
 }
