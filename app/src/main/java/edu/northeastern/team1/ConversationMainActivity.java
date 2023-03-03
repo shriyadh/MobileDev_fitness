@@ -348,10 +348,14 @@ public class ConversationMainActivity extends AppCompatActivity {
      * @param
      */
     public void sendMessageToDevice() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference s = ref.child("token").child("cdjp7y6JTIOGnM1mamn2kn:APA91bHmTEbi6aJ0OFyGb6SglJd7tJO5FHfSz_WkFzZQKRZdAPn_BJX9pSEtq6mqs58aa8Nd5xifCT125WaWQ8zG4twCAiRQx7nNvbg5avVDz5CbUbWxBnbYq49R54DxWH0TE746DnMz");
+        String a = s.getKey();
+        System.out.println(a);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sendMessageToDevice("dLsdiKG0TIufdUyq2bPp1X:APA91bGFah0pN5Jsml11wc24fi27kXQOm_7R0njljLmIsiqSZQQs6DwsgjHuiXLl9o_7oxiIi1wpXRsgpKKtOqDdtosdMI9SacGZhDNdrNL_NILKtHrRhPz1bPhlMLWtodbDiCzkZv1t");
+                sendMessageToDevice(a);
             }
         }).start();
     }
