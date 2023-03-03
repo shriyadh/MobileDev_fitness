@@ -86,7 +86,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                         db.child("token").child(CLIENT_REGISTRATION_TOKEN).setValue(loggedInUser);
 
                     }
-                    //Log.v("CLITENT TOKENNNNN", "HERE:"+CLIENT_REGISTRATION_TOKEN);
+                    Log.v("CLITENT TOKENNNNN", "HERE:"+CLIENT_REGISTRATION_TOKEN);
                     Toast.makeText(Conversation_list.this, "CLIENT_TOKEN IS: " + CLIENT_REGISTRATION_TOKEN, Toast.LENGTH_SHORT).show();
 
 
