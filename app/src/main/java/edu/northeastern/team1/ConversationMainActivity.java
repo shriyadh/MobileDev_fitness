@@ -30,6 +30,7 @@ import java.util.Objects;
 public class ConversationMainActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
     private HashMap<Long, Message> messageHashMap = new HashMap<>();
+    private List<Message> messageList = new ArrayList<>();
     public List<DataSnapshot> allMsgRef = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private TextView chatName;
@@ -221,7 +222,8 @@ public class ConversationMainActivity extends AppCompatActivity {
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         // Set Adapter
-        messageAdapter = new MessageAdapter(new ArrayList<>(messageHashMap.values()), this);
+//        messageAdapter = new MessageAdapter(new ArrayList<>(messageHashMap.values()), this);
+        messageAdapter = new MessageAdapter(messageList, this);
         messageRecycler.setAdapter(messageAdapter);
 
         // Add Divider Decor
@@ -236,36 +238,48 @@ public class ConversationMainActivity extends AppCompatActivity {
         if (clickId == dogsButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "dogs");
+            messageList.add(newMessage);
             messageHashMap.put(mid, newMessage);
-            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
+            messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("dogs");
         } else if (clickId == foodButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "food");
+            messageList.add(newMessage);
             messageHashMap.put(mid, newMessage);
-            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
+            messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("food");
         } else if (clickId == raceCarButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "race_car");
+            messageList.add(newMessage);
             messageHashMap.put(mid, newMessage);
-            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
+            messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("race_car");
         } else if (clickId == sunsetButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "sunset");
+            messageList.add(newMessage);
             messageHashMap.put(mid, newMessage);
-            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
+            messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
+//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("sunset");
@@ -301,9 +315,12 @@ public class ConversationMainActivity extends AppCompatActivity {
             String sender = message.child("sender").getValue(String.class);
             String image = (message.child("image").getValue(String.class));
             Message newMessage = new Message(mid, sender, image);
-            messageHashMap.put(mid, newMessage);
-            messageAdapter.notifyItemInserted(messageHashMap.values().size());
-            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
+//            messageHashMap.put(mid, newMessage);
+//            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+//            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
+            messageList.add(newMessage);
+            messageAdapter.notifyItemInserted(messageList.size());
+            messageRecycler.scrollToPosition(messageList.size() - 1);
 
         }
     }
@@ -350,8 +367,11 @@ public class ConversationMainActivity extends AppCompatActivity {
                                 String image = msg.child("image").getValue(String.class);
                                 Message newMessage = new Message(mid, sender, image);
                                 messageHashMap.put(mid, newMessage);
-                                messageAdapter.notifyItemInserted(messageHashMap.size());
-                                messageRecycler.scrollToPosition(messageHashMap.size() - 1);
+                                messageList.add(newMessage);
+//                                messageAdapter.notifyItemInserted(messageHashMap.size());
+                                messageAdapter.notifyItemInserted(messageList.size());
+//                                messageRecycler.scrollToPosition(messageHashMap.size() - 1);
+                                messageRecycler.scrollToPosition(messageList.size() - 1);
                             }
                         }
                     }
