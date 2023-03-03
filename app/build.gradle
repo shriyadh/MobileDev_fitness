@@ -55,6 +55,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     // Add the dependency for the Realtime Database library
     implementation 'com.google.firebase:firebase-database'
+    // Add Firebase messaging libary
+    implementation 'com.google.firebase:firebase-messaging:23.1.1'
+
 
 
 }

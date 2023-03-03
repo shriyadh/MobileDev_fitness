@@ -24,7 +24,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ConversationMainActivity extends AppCompatActivity {
@@ -36,6 +38,7 @@ public class ConversationMainActivity extends AppCompatActivity {
     public String chatId;
     public String curUser;
     public String chatUser;
+    private DatabaseReference databaseReference;
 
     private ImageView dogsButton;
     private ImageView foodButton;
@@ -45,14 +48,24 @@ public class ConversationMainActivity extends AppCompatActivity {
     private static final String SIZE_OF_MESSAGES = "SIZE_OF_MESSAGES";
     private static final String MESSAGE_INSTANCE_KEY = "MESSAGE_INSTANCE_KEY";
 
-    private static final String DOGS_URL = "https://images.unsplash.com/photo-1444212477490-ca407925329e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8ZG9nc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60";
-    private static final String FOOD_URL = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9vZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60";
-    private static final String RACE_CAR_URL = "https://images.unsplash.com/photo-1630446838167-4f63bc82e1cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cmFjZSUyMGNhciUyMGYxfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
-    private static final String SUNSET_URL = "https://images.unsplash.com/photo-1494548162494-384bba4ab999?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c3Vuc2V0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60";
+    private static final String DOGS = "dogs";
+    private static final String FOOD = "food";
+    private static final String RACE_CAR = "race_car";
+    private static final String SUNSET = "sunset";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation_main);
+
+        // init a button for EACH image(sticker) in DB
+        this.dogsButton = findViewById(R.id.dogsButton);
+        this.foodButton = findViewById(R.id.foodButton);
+        this.raceCarButton = findViewById(R.id.racecarButton);
+        this.sunsetButton = findViewById(R.id.sunsetButton);
+
+        this.databaseReference = FirebaseDatabase.getInstance().getReference();
+        // threaded loading of images into bottom buttons (for sending)
+        findImages();
 
         // grab chat_id and logged in user from previous activity
         Intent i = getIntent();
@@ -65,24 +78,68 @@ public class ConversationMainActivity extends AppCompatActivity {
         this.chatName = findViewById(R.id.textViewUsername);
         chatName.setText(chatUser);
 
-        this.dogsButton = findViewById(R.id.dogsButton);
-        Picasso.get()
-                .load(DOGS_URL)
-                .into(dogsButton);
-        this.foodButton = findViewById(R.id.foodButton);
-        Picasso.get()
-                .load(FOOD_URL)
-                .into(foodButton);
-        this.raceCarButton = findViewById(R.id.racecarButton);
-        Picasso.get()
-                .load(RACE_CAR_URL)
-                .into(raceCarButton);
-        this.sunsetButton = findViewById(R.id.sunsetButton);
-        Picasso.get()
-                .load(SUNSET_URL)
-                .into(sunsetButton);
     }
 
+    public void getFirebaseImages(){
+        DatabaseReference images = databaseReference.child("images");
+
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    for(DataSnapshot curr : snapshot.getChildren()) {
+                        String key = curr.getKey();
+                        String url = (String) curr.getValue();
+
+                        switch (key) {
+                            case DOGS:
+                                Picasso.get()
+                                        .load(url)
+                                        .into(dogsButton);
+                                break;
+                            case FOOD:
+                                Picasso.get()
+                                        .load(url)
+                                        .into(foodButton);
+                                break;
+                            case RACE_CAR:
+                                Picasso.get()
+                                        .load(url)
+                                        .into(raceCarButton);
+                                break;
+                            case SUNSET:
+                                Picasso.get()
+                                        .load(url)
+                                        .into(sunsetButton);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+
+        };
+        images.addListenerForSingleValueEvent(eventListener);
+    }
+
+    class imageThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                getFirebaseImages();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void findImages() {
+        ConversationMainActivity.imageThread imageThread = new ConversationMainActivity.imageThread();
+        new Thread(imageThread).start();
+    }
 
     class runnableThread implements Runnable {
         private Integer cid;

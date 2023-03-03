@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -66,7 +67,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         init(savedInstanceState);
 
         // Write a message to the database
-        runFirebase();
+        run_fbThread();
         createFloatingImplement();
         // Generate the token
         //using firebasedemo example code
@@ -149,6 +150,22 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     }
 
+    class fbThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                runFirebase();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void run_fbThread() {
+        Conversation_list.fbThread fbThread = new Conversation_list.fbThread();
+        new Thread(fbThread).start();
+    }
+
     private void createFloatingImplement() {
 
         fBtn = (FloatingActionButton) findViewById(R.id.floatingBtnStartChat);
@@ -165,6 +182,24 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         );
         System.out.println("Before crash");
     }
+
+    class newChatThread implements Runnable{
+
+        @Override
+        public void run() {
+            try{
+                startNewChat();
+            } catch (DatabaseException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void startNewChatVThread(){
+        newChatThread chatThread = new newChatThread();
+        new Thread(chatThread).start();
+    }
+
 
     public void startNewChat(){
         String chatUser = this.findUser;
@@ -342,6 +377,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         this.findUser = user;
         findUser = findUser.strip();
         findUser = findUser.toLowerCase(Locale.ROOT);
-        startNewChat();
+        startNewChatVThread();
     }
 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -42,8 +43,8 @@ public class StickerLedgerActivity extends AppCompatActivity {
         loggedInUser = intent.getStringExtra("Current_user");
         setUpRecycler(savedInstanceState);
 
-        getFirebaseImages();
-        getFirebaseUseCounts();
+        findImages();
+        finduseCounts();
     }
 
     public void getFirebaseImages(){
@@ -67,6 +68,22 @@ public class StickerLedgerActivity extends AppCompatActivity {
 
         };
         images.addListenerForSingleValueEvent(eventListener);
+    }
+
+    class imageThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                getFirebaseImages();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void findImages() {
+        imageThread imageThread = new imageThread();
+        new Thread(imageThread).start();
     }
 
     public void getFirebaseUseCounts(){
@@ -100,6 +117,22 @@ public class StickerLedgerActivity extends AppCompatActivity {
 
         };
         sticker_count.addListenerForSingleValueEvent(eventListener);
+    }
+
+    class useCountsThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                getFirebaseUseCounts();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void finduseCounts() {
+        useCountsThread useCountsThread = new useCountsThread();
+        new Thread(useCountsThread).start();
     }
 
     private void setUpRecycler(Bundle savedInstanceState) {
