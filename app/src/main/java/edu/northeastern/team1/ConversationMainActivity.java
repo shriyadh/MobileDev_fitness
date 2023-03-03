@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,11 +28,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class ConversationMainActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
+    private HashMap<Long, Message> messageHashMap = new HashMap<>();
     private List<Message> messageList = new ArrayList<>();
     public List<DataSnapshot> allMsgRef = new ArrayList<>();
     private MessageAdapter messageAdapter;
@@ -90,6 +89,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         this.chatName = findViewById(R.id.textViewUsername);
         chatName.setText(chatUser);
 
+        messageListener();
     }
 
     public void getReceiverToken(){
@@ -228,14 +228,10 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     public void init(Bundle savedInstanceState) {
         loadSavedInstance(savedInstanceState);
-
         runnableThread runnableThread = new runnableThread();
         runnableThread.setCid(Integer.parseInt(chatId));
         new Thread(runnableThread).start();
-
         setUpRecycler();
-
-
     }
 
     private void loadSavedInstance(Bundle savedInstanceState) {
@@ -247,6 +243,7 @@ public class ConversationMainActivity extends AppCompatActivity {
                 String image = savedInstanceState.getString(MESSAGE_INSTANCE_KEY + i + "2");
 
                 Message newMessage = new Message(mid, sentBy, image);
+                messageHashMap.put(mid, newMessage);
                 messageList.add(newMessage);
             }
         }
@@ -276,6 +273,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "dogs");
             messageList.add(newMessage);
+            messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
@@ -285,6 +283,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "food");
             messageList.add(newMessage);
+            messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
@@ -294,6 +293,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "race_car");
             messageList.add(newMessage);
+            messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
@@ -303,6 +303,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "sunset");
             messageList.add(newMessage);
+            messageHashMap.put(mid, newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
@@ -343,7 +344,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
-
         }
     }
 
@@ -433,6 +433,37 @@ public class ConversationMainActivity extends AppCompatActivity {
 
         final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
         //Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+
+    }
+
+    private void messageListener() {
+        new Thread(() -> {
+            DatabaseReference chat = FirebaseDatabase.getInstance()
+                    .getReference("/messages/" + chatId);
+            chat.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot msg:
+                                snapshot.getChildren()) {
+                            long mid = Long.parseLong(Objects.requireNonNull(msg.getKey()));
+                            if (!messageHashMap.containsKey(mid)) {
+                                String image = msg.child("image").getValue(String.class);
+                                Message newMessage = new Message(mid, chatUser, image);
+                                messageHashMap.put(mid, newMessage);
+                                messageList.add(newMessage);
+                                messageAdapter.notifyItemInserted(messageList.size());
+                                messageRecycler.scrollToPosition(messageList.size() - 1);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }).start();
 
     }
 
