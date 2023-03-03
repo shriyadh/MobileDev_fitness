@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,12 +25,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class ConversationMainActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
-    private List<Message> messageList = new ArrayList<>();
+    private HashMap<Long, Message> messageHashMap = new HashMap<>();
     public List<DataSnapshot> allMsgRef = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private TextView chatName;
@@ -77,6 +75,8 @@ public class ConversationMainActivity extends AppCompatActivity {
 
         this.chatName = findViewById(R.id.textViewUsername);
         chatName.setText(chatUser);
+
+        messageListener();
 
     }
 
@@ -179,13 +179,13 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        int length = messageList == null ? 0 : messageList.size();
+        int length = messageHashMap == null ? 0 : messageHashMap.size();
 
         outState.putInt(SIZE_OF_MESSAGES, length);
         for (int i = 0; i < length; i++) {
-            outState.putLong(MESSAGE_INSTANCE_KEY + i + "0", messageList.get(i).getMid());
-            outState.putString(MESSAGE_INSTANCE_KEY + i + "1", messageList.get(i).getSender());
-            outState.putString(MESSAGE_INSTANCE_KEY + i + "2", messageList.get(i).getImage());
+            outState.putLong(MESSAGE_INSTANCE_KEY + i + "0", messageHashMap.get(i).getMid());
+            outState.putString(MESSAGE_INSTANCE_KEY + i + "1", messageHashMap.get(i).getSender());
+            outState.putString(MESSAGE_INSTANCE_KEY + i + "2", messageHashMap.get(i).getImage());
         }
 
         super.onSaveInstanceState(outState);
@@ -193,14 +193,10 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     public void init(Bundle savedInstanceState) {
         loadSavedInstance(savedInstanceState);
-
         runnableThread runnableThread = new runnableThread();
         runnableThread.setCid(Integer.parseInt(chatId));
         new Thread(runnableThread).start();
-
         setUpRecycler();
-
-
     }
 
     private void loadSavedInstance(Bundle savedInstanceState) {
@@ -212,7 +208,7 @@ public class ConversationMainActivity extends AppCompatActivity {
                 String image = savedInstanceState.getString(MESSAGE_INSTANCE_KEY + i + "2");
 
                 Message newMessage = new Message(mid, sentBy, image);
-                messageList.add(newMessage);
+                messageHashMap.put(mid, newMessage);
             }
         }
     }
@@ -225,7 +221,7 @@ public class ConversationMainActivity extends AppCompatActivity {
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         // Set Adapter
-        messageAdapter = new MessageAdapter(messageList, this);
+        messageAdapter = new MessageAdapter(new ArrayList<>(messageHashMap.values()), this);
         messageRecycler.setAdapter(messageAdapter);
 
         // Add Divider Decor
@@ -240,36 +236,36 @@ public class ConversationMainActivity extends AppCompatActivity {
         if (clickId == dogsButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "dogs");
-            messageList.add(newMessage);
-            messageAdapter.notifyItemInserted(messageList.size());
-            messageRecycler.scrollToPosition(messageList.size() - 1);
+            messageHashMap.put(mid, newMessage);
+            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("dogs");
         } else if (clickId == foodButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "food");
-            messageList.add(newMessage);
-            messageAdapter.notifyItemInserted(messageList.size());
-            messageRecycler.scrollToPosition(messageList.size() - 1);
+            messageHashMap.put(mid, newMessage);
+            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("food");
         } else if (clickId == raceCarButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "race_car");
-            messageList.add(newMessage);
-            messageAdapter.notifyItemInserted(messageList.size());
-            messageRecycler.scrollToPosition(messageList.size() - 1);
+            messageHashMap.put(mid, newMessage);
+            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("race_car");
         } else if (clickId == sunsetButton.getId()) {
             long mid = new Date().getTime();
             Message newMessage = new Message(mid, curUser, "sunset");
-            messageList.add(newMessage);
-            messageAdapter.notifyItemInserted(messageList.size());
-            messageRecycler.scrollToPosition(messageList.size() - 1);
+            messageHashMap.put(mid, newMessage);
+            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
             sendImage(newMessage);
             getOldCount("sunset");
@@ -305,9 +301,9 @@ public class ConversationMainActivity extends AppCompatActivity {
             String sender = message.child("sender").getValue(String.class);
             String image = (message.child("image").getValue(String.class));
             Message newMessage = new Message(mid, sender, image);
-            messageList.add(newMessage);
-            messageAdapter.notifyItemInserted(messageList.size());
-            messageRecycler.scrollToPosition(messageList.size() - 1);
+            messageHashMap.put(mid, newMessage);
+            messageAdapter.notifyItemInserted(messageHashMap.values().size());
+            messageRecycler.scrollToPosition(messageHashMap.values().size() - 1);
 
         }
     }
@@ -332,6 +328,47 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageID.child("image").setValue(message.getImage());
             messageID.child("sender").setValue(message.getSender());
         }
+    }
+
+    private void messageListener() {
+        System.out.println(messageHashMap.values());
+        new Thread(() -> {
+            DatabaseReference chat = FirebaseDatabase.getInstance()
+                    .getReference("/messages/" + chatId);
+            chat.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot msg:
+                                snapshot.getChildren()) {
+                            long mid = Long.parseLong(Objects.requireNonNull(msg.getKey()));
+                            if (!messageHashMap.containsKey(mid)) {
+                                System.out.println(mid);
+
+
+                                String sender = msg.child("sender").getValue(String.class);
+                                String image = msg.child("image").getValue(String.class);
+                                Message newMessage = new Message(mid, sender, image);
+                                messageHashMap.put(mid, newMessage);
+                                messageAdapter.notifyItemInserted(messageHashMap.size());
+                                messageRecycler.scrollToPosition(messageHashMap.size() - 1);
+                            }
+                        }
+                    }
+
+
+//                    Message newMessage = new Message();
+//
+//                    messageAdapter.notifyItemInserted();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }).start();
+
     }
 
 }
