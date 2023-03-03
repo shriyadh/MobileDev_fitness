@@ -70,6 +70,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         run_fbThread();
         createFloatingImplement();
         // Generate the token
+
         //using firebasedemo example code
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
@@ -80,11 +81,70 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                     if (CLIENT_REGISTRATION_TOKEN == null) {
                         CLIENT_REGISTRATION_TOKEN = task.getResult();
                     }
+                    //Log.v("CLITENT TOKENNNNN", "HERE:"+CLIENT_REGISTRATION_TOKEN);
                     Toast.makeText(Conversation_list.this, "CLIENT_TOKEN IS: " + CLIENT_REGISTRATION_TOKEN, Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
+
+    }
+
+
+    /**
+     * Button Handler; creates a new thread that sends off a message to the target(this) device
+     *
+     * @param view
+     */
+    public void sendMessageToDevice(View view) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendMessageToDevice("dLsdiKG0TIufdUyq2bPp1X:APA91bGFah0pN5Jsml11wc24fi27kXQOm_7R0njljLmIsiqSZQQs6DwsgjHuiXLl9o_7oxiIi1wpXRsgpKKtOqDdtosdMI9SacGZhDNdrNL_NILKtHrRhPz1bPhlMLWtodbDiCzkZv1t");
+            }
+        }).start();
+    }
+
+    /**
+     * Pushes a notification to a given device-- in particular, this device,
+     * because that's what the instanceID token is defined to be.
+     */
+    private void sendMessageToDevice(String targetToken) {
+
+        // Prepare data
+        JSONObject jPayload = new JSONObject();
+        JSONObject jNotification = new JSONObject();
+        JSONObject jdata = new JSONObject();
+        try {
+            jNotification.put("title", "Message Title");
+            jNotification.put("body", "Message body");
+            jNotification.put("sound", "default");
+            jNotification.put("badge", "1");
+            jdata.put("title", "Title");
+            jdata.put("content", "data content");
+
+            /***
+             * The Notification object is now populated.
+             * Next, build the Payload that we send to the server.
+             */
+
+            // If sending to a single client
+            jPayload.put("to", targetToken); // CLIENT_REGISTRATION_TOKEN);
+
+            jPayload.put("priority", "high");
+            jPayload.put("notification", jNotification);
+            jPayload.put("data", jdata);
+            //System.out.println("HEREEEEEE22222");
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
+        //Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
 
     }
 
