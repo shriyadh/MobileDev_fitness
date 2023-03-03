@@ -179,13 +179,13 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        int length = messageHashMap == null ? 0 : messageHashMap.size();
+        int length = messageList == null ? 0 : messageList.size();
 
         outState.putInt(SIZE_OF_MESSAGES, length);
         for (int i = 0; i < length; i++) {
-            outState.putLong(MESSAGE_INSTANCE_KEY + i + "0", messageHashMap.get(i).getMid());
-            outState.putString(MESSAGE_INSTANCE_KEY + i + "1", messageHashMap.get(i).getSender());
-            outState.putString(MESSAGE_INSTANCE_KEY + i + "2", messageHashMap.get(i).getImage());
+            outState.putLong(MESSAGE_INSTANCE_KEY + i + "0", messageList.get(i).getMid());
+            outState.putString(MESSAGE_INSTANCE_KEY + i + "1", messageList.get(i).getSender());
+            outState.putString(MESSAGE_INSTANCE_KEY + i + "2", messageList.get(i).getImage());
         }
 
         super.onSaveInstanceState(outState);
@@ -209,6 +209,7 @@ public class ConversationMainActivity extends AppCompatActivity {
 
                 Message newMessage = new Message(mid, sentBy, image);
                 messageHashMap.put(mid, newMessage);
+                messageList.add(newMessage);
             }
         }
     }
