@@ -109,18 +109,12 @@ public class FirebaseActivity extends AppCompatActivity {
             }
         };
 
-
         userName.addListenerForSingleValueEvent(eventListener);
 
-
         // allow user to log in
-
          Intent intent = new Intent(this , Conversation_list.class);
          intent.putExtra("Current_user", user);
          startActivity(intent);
-
-
-
 
     }
 
@@ -136,6 +130,5 @@ public class FirebaseActivity extends AppCompatActivity {
         // all characters were numbers
         return true;
     }
-
 
 }
