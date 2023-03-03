@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -56,7 +57,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         init(savedInstanceState);
 
         // Write a message to the database
-        runFirebase();
+        run_fbThread();
         createFloatingImplement();
 
 
@@ -122,6 +123,22 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         userName.addListenerForSingleValueEvent(eventListener);
 
 
+    }
+
+    class fbThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                runFirebase();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void run_fbThread() {
+        Conversation_list.fbThread fbThread = new Conversation_list.fbThread();
+        new Thread(fbThread).start();
     }
 
     private void createFloatingImplement() {
