@@ -84,28 +84,3 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     }
 
 }
-
-
-/**
- * @Override
- *     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
- *         Message currentMessage = messageList.get(position);
- *         holder.sentBy.setText(currentMessage.getSender());
- *         DatabaseReference image = FirebaseDatabase.getInstance()
- *                 .getReference("images").child(currentMessage.getImage());
- *         image.addValueEventListener(new ValueEventListener() {
- *             @Override
- *             public void onDataChange(@NonNull DataSnapshot snapshot) {
- *                 String imageUrl = snapshot.getValue(String.class);
- *                 Picasso.get()
- *                         .load(imageUrl)
- *                         .into(holder.image);
- *             }
- *
- *             @Override
- *             public void onCancelled(@NonNull DatabaseError error) {
- *                 Log.d("Image Retrieval Error", error.getMessage());
- *             }
- *         });
- *     }
- */
