@@ -99,7 +99,7 @@ public class FirebaseActivity extends AppCompatActivity {
                 if(!dataSnapshot.exists()) {
                     //create new user
                     rootRef.child("users").child(user).setValue("");
-
+                    setStickerLedger(user);
                 }
             }
 
@@ -113,7 +113,6 @@ public class FirebaseActivity extends AppCompatActivity {
         userName.addListenerForSingleValueEvent(eventListener);
 
 
-        setStickerLedger(user);
         // allow user to log in
 
          Intent intent = new Intent(this , Conversation_list.class);
