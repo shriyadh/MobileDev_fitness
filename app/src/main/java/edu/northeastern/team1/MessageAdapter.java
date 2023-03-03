@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -33,26 +34,48 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         return new MessageViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         Message currentMessage = messageList.get(position);
         holder.sentBy.setText(currentMessage.getSender());
-        DatabaseReference image = FirebaseDatabase.getInstance()
-                .getReference("images").child(currentMessage.getImage());
-        image.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String imageUrl = snapshot.getValue(String.class);
-                Picasso.get()
-                        .load(imageUrl)
-                        .into(holder.image);
-            }
+
+        class runnableThread implements Runnable{
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("Image Retrieval Error", error.getMessage());
+            public void run() {
+                try{
+                    DatabaseReference image = FirebaseDatabase.getInstance()
+                            .getReference("images").child(currentMessage.getImage());
+                    image.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String imageUrl = snapshot.getValue(String.class);
+                            Picasso.get()
+                                    .load(imageUrl)
+                                    .into(holder.image);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.d("Image Retrieval Error", error.getMessage());
+                        }
+                    });
+
+                } catch (DatabaseException e){
+                    e.printStackTrace();
+                }
+
             }
-        });
+        }
+
+
+        runnableThread runnableThread = new runnableThread();
+        new Thread(runnableThread).start();
+
+
+
     }
 
     @Override
@@ -61,3 +84,28 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     }
 
 }
+
+
+/**
+ * @Override
+ *     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
+ *         Message currentMessage = messageList.get(position);
+ *         holder.sentBy.setText(currentMessage.getSender());
+ *         DatabaseReference image = FirebaseDatabase.getInstance()
+ *                 .getReference("images").child(currentMessage.getImage());
+ *         image.addValueEventListener(new ValueEventListener() {
+ *             @Override
+ *             public void onDataChange(@NonNull DataSnapshot snapshot) {
+ *                 String imageUrl = snapshot.getValue(String.class);
+ *                 Picasso.get()
+ *                         .load(imageUrl)
+ *                         .into(holder.image);
+ *             }
+ *
+ *             @Override
+ *             public void onCancelled(@NonNull DatabaseError error) {
+ *                 Log.d("Image Retrieval Error", error.getMessage());
+ *             }
+ *         });
+ *     }
+ */
