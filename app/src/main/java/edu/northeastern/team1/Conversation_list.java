@@ -158,6 +158,24 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         System.out.println("Before crash");
     }
 
+    class newChatThread implements Runnable{
+
+        @Override
+        public void run() {
+            try{
+                startNewChat();
+            } catch (DatabaseException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void startNewChatVThread(){
+        newChatThread chatThread = new newChatThread();
+        new Thread(chatThread).start();
+    }
+
+
     public void startNewChat(){
         String chatUser = this.findUser;
         chatUser = chatUser.toLowerCase(Locale.ROOT);
@@ -334,6 +352,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         this.findUser = user;
         findUser = findUser.strip();
         findUser = findUser.toLowerCase(Locale.ROOT);
-        startNewChat();
+        startNewChatVThread();
     }
 }
