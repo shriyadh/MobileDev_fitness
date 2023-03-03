@@ -2,6 +2,7 @@ package edu.northeastern.team1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.GenericLifecycleObserver;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +33,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,6 +71,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         // Write a message to the database
         run_fbThread();
         createFloatingImplement();
+
         // Generate the token
 
         //using firebasedemo example code
@@ -80,9 +83,14 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 } else {
                     if (CLIENT_REGISTRATION_TOKEN == null) {
                         CLIENT_REGISTRATION_TOKEN = task.getResult();
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                        db.child("token").child(CLIENT_REGISTRATION_TOKEN).setValue(loggedInUser);
+
+
                     }
                     //Log.v("CLITENT TOKENNNNN", "HERE:"+CLIENT_REGISTRATION_TOKEN);
                     Toast.makeText(Conversation_list.this, "CLIENT_TOKEN IS: " + CLIENT_REGISTRATION_TOKEN, Toast.LENGTH_SHORT).show();
+
 
                 }
             }
@@ -105,6 +113,32 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
             }
         }).start();
     }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Are you sure you want to leave?\n");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+
+                db.child("token").child(CLIENT_REGISTRATION_TOKEN).setValue("");
+                CLIENT_REGISTRATION_TOKEN = null;
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 
     /**
      * Pushes a notification to a given device-- in particular, this device,
@@ -411,6 +445,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 startChat.putExtra("Logged_user", loggedInUser);
                 startChat.putExtra("Clicked user", clicked_user);
                 startChat.putExtra("chatID", chatID);
+                startChat.putExtra("sender", CLIENT_REGISTRATION_TOKEN);
                 startActivity(startChat);
 
             }
@@ -439,4 +474,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         findUser = findUser.toLowerCase(Locale.ROOT);
         startNewChatVThread();
     }
+
+    
 }

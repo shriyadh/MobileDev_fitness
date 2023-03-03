@@ -21,6 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,11 +49,18 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     private static final String SIZE_OF_MESSAGES = "SIZE_OF_MESSAGES";
     private static final String MESSAGE_INSTANCE_KEY = "MESSAGE_INSTANCE_KEY";
+    private static String CLIENT_REGISTRATION_TOKEN = null;
+    private static String RECEIVER_REGISTRATION_TOKEN;
+    private HashMap<String, String> notifications = new HashMap<>();
+
 
     private static final String DOGS = "dogs";
     private static final String FOOD = "food";
     private static final String RACE_CAR = "race_car";
     private static final String SUNSET = "sunset";
+
+    private static String SERVER_KEY = "key=AAAAA-o_j1w:APA91bG-EIZHa2SWLK_sJawMhwOTWVlGqSSY0OfRUsHEItLB1qmCrEYgpjMXM-vyGbSVUXKbx-C_86-pwtTl9j3ZnD6DZ4BIxCKdohuYriz4dWfMimDH1c_w7ROc_JJgYNzpufkRRSJM";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +81,8 @@ public class ConversationMainActivity extends AppCompatActivity {
         chatId = i.getStringExtra("chatID");
         curUser = i.getStringExtra("Logged_user");
         chatUser = i.getStringExtra("Clicked user");
+        CLIENT_REGISTRATION_TOKEN = i.getStringExtra("sender");
+        getReceiverToken();
 
         init(savedInstanceState);
 
@@ -78,6 +90,30 @@ public class ConversationMainActivity extends AppCompatActivity {
         chatName.setText(chatUser);
 
         messageListener();
+    }
+
+    public void getReceiverToken(){
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference rec = db.child("token");
+
+        ValueEventListener ev = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot curr : snapshot.getChildren()) {
+
+                    String token =curr.getKey();
+                    String user = curr.getValue(String.class);
+                    notifications.put(token,user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        rec.addListenerForSingleValueEvent(ev);
     }
 
     public void getFirebaseImages(){
@@ -165,7 +201,6 @@ public class ConversationMainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        System.out.println("error");
                         Log.d("tag", error.getMessage());
                     }
                 };
@@ -313,6 +348,12 @@ public class ConversationMainActivity extends AppCompatActivity {
     }
 
     private void sendImage(Message message) {
+        for(String k : notifications.keySet()){
+            if(notifications.get(k).equals(chatUser)){
+                RECEIVER_REGISTRATION_TOKEN = k;
+            }
+        }
+
         sendThread sendThread = new sendThread();
         sendThread.setMessage(message);
         new Thread(sendThread).start();
@@ -331,7 +372,68 @@ public class ConversationMainActivity extends AppCompatActivity {
             DatabaseReference messageID = chatID.child(message.getMid().toString());
             messageID.child("image").setValue(message.getImage());
             messageID.child("sender").setValue(message.getSender());
+            sendMessageToDevice();
         }
+    }
+
+
+    /**
+     * Button Handler; creates a new thread that sends off a message to the target(this) device
+     *
+     * @param
+     */
+    public void sendMessageToDevice() {
+        if(RECEIVER_REGISTRATION_TOKEN != null ){
+
+            new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendMessageToDevice(RECEIVER_REGISTRATION_TOKEN);
+
+            }
+        }).start();
+    }}
+
+
+    /**
+     * Pushes a notification to a given device-- in particular, this device,
+     * because that's what the instanceID token is defined to be.
+     */
+    private void sendMessageToDevice(String targetToken) {
+
+        // Prepare data
+        JSONObject jPayload = new JSONObject();
+        JSONObject jNotification = new JSONObject();
+        JSONObject jdata = new JSONObject();
+        try {
+            jNotification.put("body", "You have received a new message from " + curUser + "!");
+            jNotification.put("sound", "default");
+            jNotification.put("badge", "1");
+
+
+
+            /***
+             * The Notification object is now populated.
+             * Next, build the Payload that we send to the server.
+             */
+
+            // If sending to a single client
+            jPayload.put("to", targetToken); // CLIENT_REGISTRATION_TOKEN);
+
+            jPayload.put("priority", "high");
+            jPayload.put("notification", jNotification);
+            jPayload.put("data", jdata);
+            //System.out.println("HEREEEEEE22222");
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
+        //Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+
     }
 
     private void messageListener() {

@@ -77,12 +77,8 @@
             </intent-filter>
         </service>
 
-        <service android:name=".FCMActivity" android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
-            </intent-filter>
 
-        </service>
+
     </application>
 
 </manifest>
