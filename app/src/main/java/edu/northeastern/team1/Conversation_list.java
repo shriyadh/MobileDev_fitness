@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +24,11 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +49,8 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
     private String findUser;
 
 
+    private static String SERVER_KEY = "key=AAAAA-o_j1w:APA91bG-EIZHa2SWLK_sJawMhwOTWVlGqSSY0OfRUsHEItLB1qmCrEYgpjMXM-vyGbSVUXKbx-C_86-pwtTl9j3ZnD6DZ4BIxCKdohuYriz4dWfMimDH1c_w7ROc_JJgYNzpufkRRSJM";
+    private static String CLIENT_REGISTRATION_TOKEN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
         // get logged in user
         loggedInUser = intent.getStringExtra("Current_user");
+        Log.v("User","user"+loggedInUser);
         setContentView(R.layout.activity_conversation_list);
         convTitle = findViewById(R.id.Conversations);
         convTitle.setText("CONVERSATIONS FOR " + loggedInUser.toUpperCase(Locale.ROOT));
@@ -59,7 +69,22 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         // Write a message to the database
         run_fbThread();
         createFloatingImplement();
+        // Generate the token
+        //using firebasedemo example code
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(Conversation_list.this, "Something is wrong!", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (CLIENT_REGISTRATION_TOKEN == null) {
+                        CLIENT_REGISTRATION_TOKEN = task.getResult();
+                    }
+                    Toast.makeText(Conversation_list.this, "CLIENT_TOKEN IS: " + CLIENT_REGISTRATION_TOKEN, Toast.LENGTH_SHORT).show();
 
+                }
+            }
+        });
 
     }
 
