@@ -47,7 +47,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             @Override
             public void run() {
                 Toast.makeText(MyFirebaseMessagingService.this.getApplicationContext(), from + "->" + body,Toast.LENGTH_LONG).show();
-
             }
         });
 
