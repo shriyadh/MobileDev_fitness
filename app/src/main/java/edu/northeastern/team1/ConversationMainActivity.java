@@ -39,6 +39,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -55,6 +56,8 @@ public class ConversationMainActivity extends AppCompatActivity {
     public String curUser;
     public String chatUser;
     private DatabaseReference databaseReference;
+    private DatabaseReference msgListenerDB;
+    private ValueEventListener msgDBEvent;
 
     private ImageView dogsButton;
     private ImageView foodButton;
@@ -69,6 +72,7 @@ public class ConversationMainActivity extends AppCompatActivity {
 
     private int notificationID = 0;
     private boolean firstOpen = false;
+    private int SIZE = 0;
 
     private static final String CHANNEL_ID = "TEAM_ONE";
     private static final String DOGS = "dogs";
@@ -76,9 +80,6 @@ public class ConversationMainActivity extends AppCompatActivity {
     private static final String RACE_CAR = "race_car";
     private static final String SUNSET = "sunset";
 
-    private  int initialSIZE = 0;
-
-    private static String SERVER_KEY = "key=AAAAA-o_j1w:APA91bG-EIZHa2SWLK_sJawMhwOTWVlGqSSY0OfRUsHEItLB1qmCrEYgpjMXM-vyGbSVUXKbx-C_86-pwtTl9j3ZnD6DZ4BIxCKdohuYriz4dWfMimDH1c_w7ROc_JJgYNzpufkRRSJM";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +101,8 @@ public class ConversationMainActivity extends AppCompatActivity {
         chatId = i.getStringExtra("chatID");
         curUser = i.getStringExtra("Logged_user");
         chatUser = i.getStringExtra("Clicked user");
-        CLIENT_REGISTRATION_TOKEN = i.getStringExtra("sender");
-       // getReceiverToken();
+        System.out.println(curUser);
+
 
         init(savedInstanceState);
 
@@ -110,32 +111,21 @@ public class ConversationMainActivity extends AppCompatActivity {
 
         messageListener();
 
-        //createNotificationChannel();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        msgListenerDB.removeEventListener(msgDBEvent);
 
     }
 
-    public void getReceiverToken(){
 
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference rec = db.child("token");
+    @Override
+    protected void onStop(){
+        super.onStop();
+        msgListenerDB.removeEventListener(msgDBEvent);
 
-        ValueEventListener ev = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot curr : snapshot.getChildren()) {
-
-                    String token =curr.getKey();
-                    String user = curr.getValue(String.class);
-                    notifications.put(token,user);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        rec.addListenerForSingleValueEvent(ev);
     }
 
     public void getFirebaseImages(){
@@ -301,7 +291,6 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
-            System.out.println(messageHashMap);
             sendImage(newMessage);
             getOldCount("dogs");
         } else if (clickId == foodButton.getId()) {
@@ -332,17 +321,12 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
 
-
             sendImage(newMessage);
             getOldCount("sunset");
         }
     }
 
     public void sendNotification(){
-
-
-        //DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        System.out.println("wooooooo");
 
         Message lastMsg = messageList.get(messageList.size()-1);
         long imgID = lastMsg.getMid();
@@ -354,10 +338,11 @@ public class ConversationMainActivity extends AppCompatActivity {
         System.out.println(sender);
         System.out.println(curUser);
 
-
         if(!sender.equalsIgnoreCase(curUser)) {
-            System.out.println("one");
             giveNotification(sender,imgType);
+        }
+        else{
+            // do nothing
         }
 
     }
@@ -370,7 +355,7 @@ public class ConversationMainActivity extends AppCompatActivity {
             //CharSequence name = getString(R.string.channel_name);
             //String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "TESTTTT", importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "TEAM ONE", importance);
             //channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -398,12 +383,9 @@ public class ConversationMainActivity extends AppCompatActivity {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
-
-
                 @SuppressLint("RemoteViewLayout") RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notification_layout);
                 contentView.setTextViewText(R.id.notification_title, sender.toUpperCase()+ " SENT YOU A MESSAGE");
                 contentView.setTextViewText(R.id.notification_message, urlNotify.toUpperCase(Locale.ROOT) + " FOR YOU :)");
-
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getWindow().getContext(), CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
@@ -412,7 +394,6 @@ public class ConversationMainActivity extends AppCompatActivity {
                         .setCustomContentView(contentView)
                         .setLargeIcon(bitmap)
                         .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap).bigLargeIcon(null))
-
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         // Set the intent that will fire when the user taps the notification
                         //.setContentIntent(pendingIntent)
@@ -421,8 +402,6 @@ public class ConversationMainActivity extends AppCompatActivity {
                 // Issue the notification.
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getWindow().getContext());
                 notificationManager.notify(notificationID++, builder.build());
-
-
             }
 
             @Override
@@ -473,6 +452,7 @@ public class ConversationMainActivity extends AppCompatActivity {
     }
 
     public void createMessageList() {
+        System.out.println("in create message");
         for (DataSnapshot message: allMsgRef) {
             long mid = Long.parseLong(Objects.requireNonNull(message.getKey()));
             String sender = message.child("sender").getValue(String.class);
@@ -481,16 +461,12 @@ public class ConversationMainActivity extends AppCompatActivity {
             messageList.add(newMessage);
             messageAdapter.notifyItemInserted(messageList.size());
             messageRecycler.scrollToPosition(messageList.size() - 1);
+            SIZE = messageList.size();
 
         }
     }
 
     private void sendImage(Message message) {
-        for(String k : notifications.keySet()){
-            if(notifications.get(k).equals(chatUser)){
-                RECEIVER_REGISTRATION_TOKEN = k;
-            }
-        }
 
         sendThread sendThread = new sendThread();
         sendThread.setMessage(message);
@@ -514,72 +490,12 @@ public class ConversationMainActivity extends AppCompatActivity {
         }
     }
 
-/*
-
-     * Button Handler; creates a new thread that sends off a message to the target(this) device
-     *
-     * @param
-
-    public void sendMessageToDevice() {
-        if(RECEIVER_REGISTRATION_TOKEN != null ){
-
-            new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sendMessageToDevice(RECEIVER_REGISTRATION_TOKEN);
-
-            }
-        }).start();
-    }}
-
-
-
-     * Pushes a notification to a given device-- in particular, this device,
-     * because that's what the instanceID token is defined to be.
-
-    private void sendMessageToDevice(String targetToken) {
-
-        // Prepare data
-        JSONObject jPayload = new JSONObject();
-        JSONObject jNotification = new JSONObject();
-        JSONObject jdata = new JSONObject();
-        try {
-            jNotification.put("body", "You have received a new message from " + curUser + "!");
-            jNotification.put("sound", "default");
-            jNotification.put("badge", "1");
-
-
-
-
-             * The Notification object is now populated.
-             * Next, build the Payload that we send to the server.
-
-
-            // If sending to a single client
-            jPayload.put("to", targetToken); // CLIENT_REGISTRATION_TOKEN);
-
-            jPayload.put("priority", "high");
-            jPayload.put("notification", jNotification);
-            jPayload.put("data", jdata);
-
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
-
-        Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
-
-    }
-*/
     private void messageListener() {
-
+        System.out.println("In message listener");
         new Thread(() -> {
-            DatabaseReference chat = FirebaseDatabase.getInstance()
+            msgListenerDB = FirebaseDatabase.getInstance()
                     .getReference("/messages/" + chatId);
-            chat.addValueEventListener(new ValueEventListener() {
+             msgDBEvent = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
@@ -587,16 +503,17 @@ public class ConversationMainActivity extends AppCompatActivity {
                                 snapshot.getChildren()) {
                             long mid = Long.parseLong(Objects.requireNonNull(msg.getKey()));
                             if (!messageHashMap.containsKey(mid)) {
+                                System.out.println("in IFFFFFFFFFFFFFF");
                                 String image = msg.child("image").getValue(String.class);
                                 Message newMessage = new Message(mid, chatUser, image);
                                 messageHashMap.put(mid, newMessage);
                                 messageList.add(newMessage);
                                 messageAdapter.notifyItemInserted(messageList.size());
                                 messageRecycler.scrollToPosition(messageList.size() - 1);
-                                //if(firstOpen) {
+                                if(SIZE == 0 || messageHashMap.size() > SIZE) {
                                     System.out.println("HEre");
                                     sendNotification();
-                               // }
+                                }
 
                             }
                         }
@@ -612,7 +529,8 @@ public class ConversationMainActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
-            });
+            };
+            msgListenerDB.addValueEventListener(msgDBEvent);
         }).start();
 
     }

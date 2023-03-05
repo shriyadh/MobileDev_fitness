@@ -51,9 +51,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
     private String findUser;
 
 
-    private static String SERVER_KEY = "key=AAAAA-o_j1w:APA91bG-EIZHa2SWLK_sJawMhwOTWVlGqSSY0OfRUsHEItLB1qmCrEYgpjMXM-vyGbSVUXKbx-C_86-pwtTl9j3ZnD6DZ4BIxCKdohuYriz4dWfMimDH1c_w7ROc_JJgYNzpufkRRSJM";
-    private static String CLIENT_REGISTRATION_TOKEN;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +58,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
         // get logged in user
         loggedInUser = intent.getStringExtra("Current_user");
-        Log.v("User","user"+loggedInUser);
+        System.out.println(loggedInUser);
         setContentView(R.layout.activity_conversation_list);
         convTitle = findViewById(R.id.Conversations);
         convTitle.setText("CONVERSATIONS FOR " + loggedInUser.toUpperCase(Locale.ROOT));
@@ -72,60 +69,16 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         run_fbThread();
         createFloatingImplement();
 
-        // Generate the token
-
-        //using firebasedemo example code
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    Toast.makeText(Conversation_list.this, "Something is wrong!", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (CLIENT_REGISTRATION_TOKEN == null) {
-                        CLIENT_REGISTRATION_TOKEN = task.getResult();
-                        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-                        db.child("token").child(CLIENT_REGISTRATION_TOKEN).setValue(loggedInUser);
-
-
-                    }
-                    //Log.v("CLITENT TOKENNNNN", "HERE:"+CLIENT_REGISTRATION_TOKEN);
-                    Toast.makeText(Conversation_list.this, "CLIENT_TOKEN IS: " + CLIENT_REGISTRATION_TOKEN, Toast.LENGTH_SHORT).show();
-
-
-                }
-            }
-        });
-
-    }
-
-
-    /**
-     * Button Handler; creates a new thread that sends off a message to the target(this) device
-     *
-     * @param view
-     */
-    public void sendMessageToDevice(View view) {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sendMessageToDevice("dLsdiKG0TIufdUyq2bPp1X:APA91bGFah0pN5Jsml11wc24fi27kXQOm_7R0njljLmIsiqSZQQs6DwsgjHuiXLl9o_7oxiIi1wpXRsgpKKtOqDdtosdMI9SacGZhDNdrNL_NILKtHrRhPz1bPhlMLWtodbDiCzkZv1t");
-            }
-        }).start();
     }
 
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setMessage("Are you sure you want to leave?\n");
+        builder.setMessage("Are you sure you want to logout?\n");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-
-                db.child("token").child(CLIENT_REGISTRATION_TOKEN).setValue("");
-                CLIENT_REGISTRATION_TOKEN = null;
                 finish();
             }
         });
@@ -137,49 +90,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
         });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-
-    /**
-     * Pushes a notification to a given device-- in particular, this device,
-     * because that's what the instanceID token is defined to be.
-     */
-    private void sendMessageToDevice(String targetToken) {
-
-        // Prepare data
-        JSONObject jPayload = new JSONObject();
-        JSONObject jNotification = new JSONObject();
-        JSONObject jdata = new JSONObject();
-        try {
-            jNotification.put("title", "Message Title");
-            jNotification.put("body", "Message body");
-            jNotification.put("sound", "default");
-            jNotification.put("badge", "1");
-            jdata.put("title", "Title");
-            jdata.put("content", "data content");
-
-            /***
-             * The Notification object is now populated.
-             * Next, build the Payload that we send to the server.
-             */
-
-            // If sending to a single client
-            jPayload.put("to", targetToken); // CLIENT_REGISTRATION_TOKEN);
-
-            jPayload.put("priority", "high");
-            jPayload.put("notification", jNotification);
-            jPayload.put("data", jdata);
-            //System.out.println("HEREEEEEE22222");
-
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
-        //Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
-
     }
 
     public void runFirebase(){
@@ -200,34 +110,24 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                             String a = curr.getKey();
                             users.add(a);
                         }
-                        //System.out.println(users+loggedInUser);
-
-                        System.out.println(users.contains(loggedInUser));
-
 
                         if(users.contains(loggedInUser)) {
-                            System.out.println("YES");
-
                             String id = userData.getKey();
                             String add_user="";
                             for(String name : users){
                                 if(!name.equals(loggedInUser)){
                                     add_user = name;
-                                    System.out.println(add_user);
                                 }
                             }
 
                             Conversations conversation = new Conversations(add_user,id);
                             listOfUsers.add(conversation);
                         }
-
                     }
-
                 }
                 else{
                     // no chats to display
                 }
-
                 adapter.notifyItemRangeInserted(0, listOfUsers.size());
                 conversationRecycler.scrollToPosition(listOfUsers.size()-1);
             }
@@ -238,10 +138,7 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
             }
 
         };
-
         userName.addListenerForSingleValueEvent(eventListener);
-
-
     }
 
     class fbThread implements Runnable {
@@ -269,12 +166,9 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                                         // creating the alert dialog box
                                         NewChat input = new NewChat();
                                         input.show(getSupportFragmentManager(), "New Chat");
-
                                     }
                                 }
-
         );
-        System.out.println("Before crash");
     }
 
     class newChatThread implements Runnable{
@@ -390,10 +284,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                                         }
                                     };
                                     getlastID.addListenerForSingleValueEvent(eventListener3);
-
-
-
-
                                 }
 
                             }
@@ -445,7 +335,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
                 startChat.putExtra("Logged_user", loggedInUser);
                 startChat.putExtra("Clicked user", clicked_user);
                 startChat.putExtra("chatID", chatID);
-                startChat.putExtra("sender", CLIENT_REGISTRATION_TOKEN);
                 startActivity(startChat);
 
             }
@@ -468,7 +357,6 @@ public class Conversation_list extends AppCompatActivity implements NewChat.DgLi
 
     @Override
     public void applyTexts(String user) {
-
         this.findUser = user;
         findUser = findUser.strip();
         findUser = findUser.toLowerCase(Locale.ROOT);
